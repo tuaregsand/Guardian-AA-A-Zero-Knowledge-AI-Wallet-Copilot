@@ -5,3 +5,22 @@ edition = "2021"
 
 [dependencies]
 sha2 = "0.10"
+halo2_proofs = "0.3"
+# halo2_gadgets = "0.3"
+ezkl = { git = "https://github.com/zkonduit/ezkl.git", branch = "main" } # Or specify a commit/tag
+halo2_gadgets = { version = "0.3", features = ["unstable-sha256-gadget"] }
+rand_core = { version = "0.6", default-features = false, features = ["std"] } # Often needed for halo2
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+# num-traits = "0.2" # Removing as Fp doesn't implement FromPrimitive directly
+
+[dev-dependencies]
+criterion = "0.5" # Check for latest version
+
+[[bench]]
+name = "sha256_benchmark"
+harness = false
+
+[[bin]]
+name = "generate-abi"
+path = "src/bin/generate_abi.rs"
