@@ -7,6 +7,7 @@
 [![Rust](https://img.shields.io/badge/rust-1.70+-orange.svg)](https://www.rust-lang.org)
 [![Solidity](https://img.shields.io/badge/solidity-0.8.25-blue.svg)](https://soliditylang.org/)
 [![Foundry](https://img.shields.io/badge/Built%20with-Foundry-FFFBF3?logo=ethereum)](https://book.getfoundry.sh/)
+[![NPM Package](https://img.shields.io/badge/NPM-@tuaregsand/guardian--aa--sdk-red.svg)](https://www.npmjs.com/package/@tuaregsand/guardian-aa-sdk)
 [![Tests](https://img.shields.io/badge/Tests-5%2F5%20Passing-brightgreen.svg)]()
 [![Status](https://img.shields.io/badge/Status-Active%20Development-green.svg)]()
 

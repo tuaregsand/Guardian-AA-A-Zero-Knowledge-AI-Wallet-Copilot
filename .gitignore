@@ -51,4 +51,13 @@ typechain-types/
 
 # Logs
 logs/
-*.log 
+*.log
+
+# Yarn
+yarn-error.log
+
+# NPM registry files (may contain tokens)
+.npmrc
+
+# Python venv
+pyvenv.cfg 
