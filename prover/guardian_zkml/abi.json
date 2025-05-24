@@ -1,0 +1,252 @@
+{
+  "circuitName": "Guardian-AA SHA256 Circuit",
+  "version": "1.0.0",
+  "description": "A Halo2 zero-knowledge circuit that proves the correct computation of a SHA256 hash. The circuit takes arbitrary input data, applies proper SHA256 padding, and computes the hash using the standard SHA256 algorithm. The public outputs are the 32 bytes of the resulting hash, each represented as a field element. This circuit is optimized for performance with a target of sub-500ms proof generation.",
+  "publicInputs": [
+    {
+      "name": "hash_byte_0",
+      "type": "field_element",
+      "description": "Byte 0 of the 32-byte SHA256 hash output (big-endian format). Each byte is represented as a field element in the range [0, 255].",
+      "byteOffset": 0,
+      "constraints": "0 ≤ value ≤ 255"
+    },
+    {
+      "name": "hash_byte_1",
+      "type": "field_element",
+      "description": "Byte 1 of the 32-byte SHA256 hash output (big-endian format). Each byte is represented as a field element in the range [0, 255].",
+      "byteOffset": 1,
+      "constraints": "0 ≤ value ≤ 255"
+    },
+    {
+      "name": "hash_byte_2",
+      "type": "field_element",
+      "description": "Byte 2 of the 32-byte SHA256 hash output (big-endian format). Each byte is represented as a field element in the range [0, 255].",
+      "byteOffset": 2,
+      "constraints": "0 ≤ value ≤ 255"
+    },
+    {
+      "name": "hash_byte_3",
+      "type": "field_element",
+      "description": "Byte 3 of the 32-byte SHA256 hash output (big-endian format). Each byte is represented as a field element in the range [0, 255].",
+      "byteOffset": 3,
+      "constraints": "0 ≤ value ≤ 255"
+    },
+    {
+      "name": "hash_byte_4",
+      "type": "field_element",
+      "description": "Byte 4 of the 32-byte SHA256 hash output (big-endian format). Each byte is represented as a field element in the range [0, 255].",
+      "byteOffset": 4,
+      "constraints": "0 ≤ value ≤ 255"
+    },
+    {
+      "name": "hash_byte_5",
+      "type": "field_element",
+      "description": "Byte 5 of the 32-byte SHA256 hash output (big-endian format). Each byte is represented as a field element in the range [0, 255].",
+      "byteOffset": 5,
+      "constraints": "0 ≤ value ≤ 255"
+    },
+    {
+      "name": "hash_byte_6",
+      "type": "field_element",
+      "description": "Byte 6 of the 32-byte SHA256 hash output (big-endian format). Each byte is represented as a field element in the range [0, 255].",
+      "byteOffset": 6,
+      "constraints": "0 ≤ value ≤ 255"
+    },
+    {
+      "name": "hash_byte_7",
+      "type": "field_element",
+      "description": "Byte 7 of the 32-byte SHA256 hash output (big-endian format). Each byte is represented as a field element in the range [0, 255].",
+      "byteOffset": 7,
+      "constraints": "0 ≤ value ≤ 255"
+    },
+    {
+      "name": "hash_byte_8",
+      "type": "field_element",
+      "description": "Byte 8 of the 32-byte SHA256 hash output (big-endian format). Each byte is represented as a field element in the range [0, 255].",
+      "byteOffset": 8,
+      "constraints": "0 ≤ value ≤ 255"
+    },
+    {
+      "name": "hash_byte_9",
+      "type": "field_element",
+      "description": "Byte 9 of the 32-byte SHA256 hash output (big-endian format). Each byte is represented as a field element in the range [0, 255].",
+      "byteOffset": 9,
+      "constraints": "0 ≤ value ≤ 255"
+    },
+    {
+      "name": "hash_byte_10",
+      "type": "field_element",
+      "description": "Byte 10 of the 32-byte SHA256 hash output (big-endian format). Each byte is represented as a field element in the range [0, 255].",
+      "byteOffset": 10,
+      "constraints": "0 ≤ value ≤ 255"
+    },
+    {
+      "name": "hash_byte_11",
+      "type": "field_element",
+      "description": "Byte 11 of the 32-byte SHA256 hash output (big-endian format). Each byte is represented as a field element in the range [0, 255].",
+      "byteOffset": 11,
+      "constraints": "0 ≤ value ≤ 255"
+    },
+    {
+      "name": "hash_byte_12",
+      "type": "field_element",
+      "description": "Byte 12 of the 32-byte SHA256 hash output (big-endian format). Each byte is represented as a field element in the range [0, 255].",
+      "byteOffset": 12,
+      "constraints": "0 ≤ value ≤ 255"
+    },
+    {
+      "name": "hash_byte_13",
+      "type": "field_element",
+      "description": "Byte 13 of the 32-byte SHA256 hash output (big-endian format). Each byte is represented as a field element in the range [0, 255].",
+      "byteOffset": 13,
+      "constraints": "0 ≤ value ≤ 255"
+    },
+    {
+      "name": "hash_byte_14",
+      "type": "field_element",
+      "description": "Byte 14 of the 32-byte SHA256 hash output (big-endian format). Each byte is represented as a field element in the range [0, 255].",
+      "byteOffset": 14,
+      "constraints": "0 ≤ value ≤ 255"
+    },
+    {
+      "name": "hash_byte_15",
+      "type": "field_element",
+      "description": "Byte 15 of the 32-byte SHA256 hash output (big-endian format). Each byte is represented as a field element in the range [0, 255].",
+      "byteOffset": 15,
+      "constraints": "0 ≤ value ≤ 255"
+    },
+    {
+      "name": "hash_byte_16",
+      "type": "field_element",
+      "description": "Byte 16 of the 32-byte SHA256 hash output (big-endian format). Each byte is represented as a field element in the range [0, 255].",
+      "byteOffset": 16,
+      "constraints": "0 ≤ value ≤ 255"
+    },
+    {
+      "name": "hash_byte_17",
+      "type": "field_element",
+      "description": "Byte 17 of the 32-byte SHA256 hash output (big-endian format). Each byte is represented as a field element in the range [0, 255].",
+      "byteOffset": 17,
+      "constraints": "0 ≤ value ≤ 255"
+    },
+    {
+      "name": "hash_byte_18",
+      "type": "field_element",
+      "description": "Byte 18 of the 32-byte SHA256 hash output (big-endian format). Each byte is represented as a field element in the range [0, 255].",
+      "byteOffset": 18,
+      "constraints": "0 ≤ value ≤ 255"
+    },
+    {
+      "name": "hash_byte_19",
+      "type": "field_element",
+      "description": "Byte 19 of the 32-byte SHA256 hash output (big-endian format). Each byte is represented as a field element in the range [0, 255].",
+      "byteOffset": 19,
+      "constraints": "0 ≤ value ≤ 255"
+    },
+    {
+      "name": "hash_byte_20",
+      "type": "field_element",
+      "description": "Byte 20 of the 32-byte SHA256 hash output (big-endian format). Each byte is represented as a field element in the range [0, 255].",
+      "byteOffset": 20,
+      "constraints": "0 ≤ value ≤ 255"
+    },
+    {
+      "name": "hash_byte_21",
+      "type": "field_element",
+      "description": "Byte 21 of the 32-byte SHA256 hash output (big-endian format). Each byte is represented as a field element in the range [0, 255].",
+      "byteOffset": 21,
+      "constraints": "0 ≤ value ≤ 255"
+    },
+    {
+      "name": "hash_byte_22",
+      "type": "field_element",
+      "description": "Byte 22 of the 32-byte SHA256 hash output (big-endian format). Each byte is represented as a field element in the range [0, 255].",
+      "byteOffset": 22,
+      "constraints": "0 ≤ value ≤ 255"
+    },
+    {
+      "name": "hash_byte_23",
+      "type": "field_element",
+      "description": "Byte 23 of the 32-byte SHA256 hash output (big-endian format). Each byte is represented as a field element in the range [0, 255].",
+      "byteOffset": 23,
+      "constraints": "0 ≤ value ≤ 255"
+    },
+    {
+      "name": "hash_byte_24",
+      "type": "field_element",
+      "description": "Byte 24 of the 32-byte SHA256 hash output (big-endian format). Each byte is represented as a field element in the range [0, 255].",
+      "byteOffset": 24,
+      "constraints": "0 ≤ value ≤ 255"
+    },
+    {
+      "name": "hash_byte_25",
+      "type": "field_element",
+      "description": "Byte 25 of the 32-byte SHA256 hash output (big-endian format). Each byte is represented as a field element in the range [0, 255].",
+      "byteOffset": 25,
+      "constraints": "0 ≤ value ≤ 255"
+    },
+    {
+      "name": "hash_byte_26",
+      "type": "field_element",
+      "description": "Byte 26 of the 32-byte SHA256 hash output (big-endian format). Each byte is represented as a field element in the range [0, 255].",
+      "byteOffset": 26,
+      "constraints": "0 ≤ value ≤ 255"
+    },
+    {
+      "name": "hash_byte_27",
+      "type": "field_element",
+      "description": "Byte 27 of the 32-byte SHA256 hash output (big-endian format). Each byte is represented as a field element in the range [0, 255].",
+      "byteOffset": 27,
+      "constraints": "0 ≤ value ≤ 255"
+    },
+    {
+      "name": "hash_byte_28",
+      "type": "field_element",
+      "description": "Byte 28 of the 32-byte SHA256 hash output (big-endian format). Each byte is represented as a field element in the range [0, 255].",
+      "byteOffset": 28,
+      "constraints": "0 ≤ value ≤ 255"
+    },
+    {
+      "name": "hash_byte_29",
+      "type": "field_element",
+      "description": "Byte 29 of the 32-byte SHA256 hash output (big-endian format). Each byte is represented as a field element in the range [0, 255].",
+      "byteOffset": 29,
+      "constraints": "0 ≤ value ≤ 255"
+    },
+    {
+      "name": "hash_byte_30",
+      "type": "field_element",
+      "description": "Byte 30 of the 32-byte SHA256 hash output (big-endian format). Each byte is represented as a field element in the range [0, 255].",
+      "byteOffset": 30,
+      "constraints": "0 ≤ value ≤ 255"
+    },
+    {
+      "name": "hash_byte_31",
+      "type": "field_element",
+      "description": "Byte 31 of the 32-byte SHA256 hash output (big-endian format). Each byte is represented as a field element in the range [0, 255].",
+      "byteOffset": 31,
+      "constraints": "0 ≤ value ≤ 255"
+    }
+  ],
+  "privateInputs": [
+    {
+      "name": "preimage_data",
+      "type": "bytes",
+      "description": "The input data to be hashed. This can be any sequence of bytes. The circuit automatically handles SHA256 padding according to RFC 6234. Maximum supported input size depends on circuit parameters (k=14 supports up to ~8KB of input data).",
+      "byteOffset": 0,
+      "constraints": "Variable length byte array, automatically padded to 512-bit blocks"
+    }
+  ],
+  "metadata": {
+    "circuitSize": "2^14 = 16,384 rows",
+    "constraintCount": "~50,000 constraints",
+    "performanceTarget": "< 500ms proof generation on modern hardware"
+  },
+  "securityProperties": [
+    "Zero-knowledge: The proof reveals only the SHA256 hash, not the input data",
+    "Soundness: Invalid proofs are rejected with negligible probability",
+    "Completeness: Valid computations always produce acceptable proofs",
+    "SHA256 compliance: Implements the full SHA256 algorithm per RFC 6234",
+    "Proper padding: Handles message padding correctly for any input length"
+  ]
+}
