@@ -64,17 +64,10 @@ contract SimpleAccount is BaseAccount, Initializable, UUPSUpgradeable {
      * @param values Array of values to send
      * @param datas Array of call data
      */
-    function executeBatch(
-        address[] calldata targets,
-        uint256[] calldata values,
-        bytes[] calldata datas
-    ) external {
+    function executeBatch(address[] calldata targets, uint256[] calldata values, bytes[] calldata datas) external {
         _requireFromEntryPointOrOwner();
-        require(
-            targets.length == values.length && values.length == datas.length,
-            "SimpleAccount: length mismatch"
-        );
-        
+        require(targets.length == values.length && values.length == datas.length, "SimpleAccount: length mismatch");
+
         for (uint256 i = 0; i < targets.length; i++) {
             _execute(targets[i], values[i], datas[i]);
         }
@@ -84,7 +77,7 @@ contract SimpleAccount is BaseAccount, Initializable, UUPSUpgradeable {
      * @notice Internal execute function
      */
     function _execute(address target, uint256 value, bytes memory data) internal {
-        (bool success, bytes memory result) = target.call{value: value}(data);
+        (bool success, bytes memory result) = target.call{ value: value }(data);
         if (!success) {
             // If the call failed, revert with the original revert reason
             if (result.length > 0) {
@@ -108,13 +101,15 @@ contract SimpleAccount is BaseAccount, Initializable, UUPSUpgradeable {
      * @notice Validate the signature
      * @dev Returns 0 if signature is valid
      */
-    function _validateSignature(
-        UserOperationLib.UserOperation calldata userOp,
-        bytes32 userOpHash
-    ) internal virtual override returns (uint256) {
+    function _validateSignature(UserOperationLib.UserOperation calldata userOp, bytes32 userOpHash)
+        internal
+        virtual
+        override
+        returns (uint256)
+    {
         bytes32 hash = userOpHash.toEthSignedMessageHash();
         address signer = hash.recover(userOp.signature);
-        
+
         if (signer == owner) {
             return SIG_VALIDATION_SUCCESS;
         }
@@ -125,13 +120,13 @@ contract SimpleAccount is BaseAccount, Initializable, UUPSUpgradeable {
      * @notice Authorize an upgrade
      * @dev Only the owner can upgrade
      */
-    function _authorizeUpgrade(address newImplementation) internal override onlyOwner {}
+    function _authorizeUpgrade(address newImplementation) internal override onlyOwner { }
 
     /**
      * @notice Deposit to the account
      */
     function addDeposit() public payable {
-        entryPoint().depositTo{value: msg.value}(address(this));
+        entryPoint().depositTo{ value: msg.value }(address(this));
     }
 
     /**
@@ -153,5 +148,5 @@ contract SimpleAccount is BaseAccount, Initializable, UUPSUpgradeable {
     /**
      * @notice Receive ETH
      */
-    receive() external payable {}
-} 
+    receive() external payable { }
+}

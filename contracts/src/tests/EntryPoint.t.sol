@@ -14,7 +14,7 @@ contract EntryPointTest is Test {
     EntryPoint public entryPoint;
     SimpleAccountFactory public factory;
     VerifyingPaymaster public paymaster;
-    
+
     address public owner;
     uint256 public ownerKey;
     address public bundler;
@@ -39,7 +39,7 @@ contract EntryPointTest is Test {
     function testDeployAccount() public {
         // Create account
         SimpleAccount account = factory.createAccount(owner, 0);
-        
+
         // Verify account
         assertEq(account.owner(), owner);
         assertEq(address(account.entryPoint()), address(entryPoint));
@@ -48,11 +48,11 @@ contract EntryPointTest is Test {
     function testSimpleOperation() public {
         // Create account
         SimpleAccount account = factory.createAccount(owner, 0);
-        
+
         // Fund account and deposit to EntryPoint
         vm.deal(address(account), 1 ether);
-        account.addDeposit{value: 0.5 ether}();
-        
+        account.addDeposit{ value: 0.5 ether }();
+
         // Create user operation
         UserOperationLib.UserOperation memory userOp = UserOperationLib.UserOperation({
             sender: address(account),
@@ -67,20 +67,20 @@ contract EntryPointTest is Test {
             paymasterAndData: "",
             signature: ""
         });
-        
+
         // Sign operation (need to sign the Ethereum signed message hash)
         bytes32 userOpHash = entryPoint.getUserOpHash(userOp);
         bytes32 ethSignedHash = keccak256(abi.encodePacked("\x19Ethereum Signed Message:\n32", userOpHash));
         (uint8 v, bytes32 r, bytes32 s) = vm.sign(ownerKey, ethSignedHash);
         userOp.signature = abi.encodePacked(r, s, v);
-        
+
         // Execute
         UserOperationLib.UserOperation[] memory ops = new UserOperationLib.UserOperation[](1);
         ops[0] = userOp;
-        
+
         vm.prank(bundler);
         entryPoint.handleOps(ops, payable(bundler));
-        
+
         // Verify execution
         assertEq(address(0x1234).balance, 0.1 ether);
     }
@@ -88,15 +88,15 @@ contract EntryPointTest is Test {
     function testGaslessOperation() public {
         // Create account
         SimpleAccount account = factory.createAccount(owner, 0);
-        
+
         // Give account minimal ETH for prefund (will be refunded by paymaster)
         vm.deal(address(account), 0.01 ether);
-        
+
         // Fund paymaster and deposit to EntryPoint
         vm.deal(address(paymaster), 1 ether);
-        (bool success, ) = address(paymaster).call{value: 0.5 ether}("");
+        (bool success,) = address(paymaster).call{ value: 0.5 ether }("");
         require(success, "Paymaster deposit failed");
-        
+
         // Create user operation with paymaster
         UserOperationLib.UserOperation memory userOp = UserOperationLib.UserOperation({
             sender: address(account),
@@ -111,7 +111,7 @@ contract EntryPointTest is Test {
             paymasterAndData: "",
             signature: ""
         });
-        
+
         // Get paymaster nonce and sign
         uint256 pmNonce = paymaster.getNonce(address(account));
         bytes32 pmHash = keccak256(
@@ -130,36 +130,30 @@ contract EntryPointTest is Test {
                 block.chainid
             )
         );
-        
+
         bytes32 pmEthSignedHash = keccak256(abi.encodePacked("\x19Ethereum Signed Message:\n32", pmHash));
         (uint8 pmV, bytes32 pmR, bytes32 pmS) = vm.sign(paymasterSignerKey, pmEthSignedHash);
-        userOp.paymasterAndData = abi.encodePacked(
-            address(paymaster),
-            pmNonce,
-            pmR,
-            pmS,
-            pmV
-        );
-        
+        userOp.paymasterAndData = abi.encodePacked(address(paymaster), pmNonce, pmR, pmS, pmV);
+
         // Sign user operation (need to sign the Ethereum signed message hash)
         bytes32 userOpHash = entryPoint.getUserOpHash(userOp);
         bytes32 ethSignedHash = keccak256(abi.encodePacked("\x19Ethereum Signed Message:\n32", userOpHash));
         (uint8 v, bytes32 r, bytes32 s) = vm.sign(ownerKey, ethSignedHash);
         userOp.signature = abi.encodePacked(r, s, v);
-        
+
         // Execute
         UserOperationLib.UserOperation[] memory ops = new UserOperationLib.UserOperation[](1);
         ops[0] = userOp;
-        
+
         uint256 paymasterBalanceBefore = address(paymaster).balance;
-        (uint256 paymasterDepositBefore, , , , ) = paymaster.getDeposit();
-        
+        (uint256 paymasterDepositBefore,,,,) = paymaster.getDeposit();
+
         vm.prank(bundler);
         entryPoint.handleOps(ops, payable(bundler));
-        
-        (uint256 paymasterDepositAfter, , , , ) = paymaster.getDeposit();
-        
+
+        (uint256 paymasterDepositAfter,,,,) = paymaster.getDeposit();
+
         // Verify paymaster paid (deposit should decrease)
         assertLt(paymasterDepositAfter, paymasterDepositBefore);
     }
-} 
+}

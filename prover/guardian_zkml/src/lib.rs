@@ -51,36 +51,38 @@ impl ProvingSystem {
 
         // Generate params
         let params = Params::new(CIRCUIT_K);
-        
+
         // Create dummy circuit for key generation
         let circuit = Sha256Circuit::new(vec![]);
-        
+
         // Generate verifying key
-        let vk = keygen_vk(&params, &circuit).map_err(|e| format!("VK generation failed: {:?}", e))?;
-        
-        // Generate proving key  
-        let pk = keygen_pk(&params, vk.clone(), &circuit).map_err(|e| format!("PK generation failed: {:?}", e))?;
+        let vk =
+            keygen_vk(&params, &circuit).map_err(|e| format!("VK generation failed: {:?}", e))?;
+
+        // Generate proving key
+        let pk = keygen_pk(&params, vk.clone(), &circuit)
+            .map_err(|e| format!("PK generation failed: {:?}", e))?;
 
         println!("Generated proving system in {:?}", start.elapsed());
-        
+
         Ok(ProvingSystem { params, pk, vk })
     }
 }
 
 fn get_proving_system() -> Result<&'static ProvingSystem, String> {
     unsafe {
-        INIT_LOCK.call_once(|| {
-            match ProvingSystem::load_or_generate() {
-                Ok(system) => {
-                    PROVING_SYSTEM = Some(system);
-                }
-                Err(e) => {
-                    eprintln!("Failed to initialize proving system: {}", e);
-                }
+        INIT_LOCK.call_once(|| match ProvingSystem::load_or_generate() {
+            Ok(system) => {
+                PROVING_SYSTEM = Some(system);
+            }
+            Err(e) => {
+                eprintln!("Failed to initialize proving system: {}", e);
             }
         });
 
-        PROVING_SYSTEM.as_ref().ok_or_else(|| "Proving system not initialized".to_string())
+        PROVING_SYSTEM
+            .as_ref()
+            .ok_or_else(|| "Proving system not initialized".to_string())
     }
 }
 
@@ -110,13 +112,13 @@ pub fn verify_proof_slice(data: &[u8], output: &Output) -> bool {
         hasher.update(data);
         hasher.finalize().into()
     };
-    
+
     output.hash == expected_hash
 }
 
 fn generate_proof_internal(data: &[u8]) -> Result<([u8; 32], Vec<u8>), String> {
     let start = Instant::now();
-    
+
     let system = get_proving_system()?;
     let circuit = Sha256Circuit::new(data.to_vec());
     let hash = circuit.expected_hash();
@@ -127,7 +129,7 @@ fn generate_proof_internal(data: &[u8]) -> Result<([u8; 32], Vec<u8>), String> {
 
     // Create proof
     let mut transcript = Blake2bWrite::<_, _, Challenge255<_>>::init(vec![]);
-    
+
     let proof_start = Instant::now();
     create_proof(
         &system.params,
@@ -136,32 +138,36 @@ fn generate_proof_internal(data: &[u8]) -> Result<([u8; 32], Vec<u8>), String> {
         &[instances],
         OsRng,
         &mut transcript,
-    ).map_err(|e| format!("Proof creation failed: {:?}", e))?;
-    
+    )
+    .map_err(|e| format!("Proof creation failed: {:?}", e))?;
+
     let proof_time = proof_start.elapsed();
     let proof_bytes = transcript.finalize();
 
     println!("Proof generated in {:?} (target: <500ms)", proof_time);
-    
+
     if proof_time.as_millis() > 500 {
-        println!("WARNING: Proof time ({:?}) exceeds 500ms target", proof_time);
+        println!(
+            "WARNING: Proof time ({:?}) exceeds 500ms target",
+            proof_time
+        );
     }
 
     println!("Total time including setup: {:?}", start.elapsed());
-    
+
     Ok((hash, proof_bytes))
 }
 
 fn verify_proof_internal(hash: &[u8; 32], proof_bytes: &[u8]) -> Result<bool, String> {
     let system = get_proving_system()?;
-    
+
     // Convert hash to public inputs
     let public_inputs: Vec<Fp> = hash.iter().map(|&byte| Fp::from(byte as u64)).collect();
     let instances = &[public_inputs.as_slice()];
 
     // Verify proof
     let mut transcript = Blake2bRead::<_, _, Challenge255<_>>::init(proof_bytes);
-    
+
     let verification_result = halo2_proofs::plonk::verify_proof(
         &system.params,
         &system.vk,
@@ -182,12 +188,12 @@ pub extern "C" fn generate_proof(input_ptr: *const Input, output_ptr: *mut Outpu
     if input_ptr.is_null() || output_ptr.is_null() {
         return -1;
     }
-    
+
     let input = unsafe { &*input_ptr };
     if input.data.is_null() {
         return -2;
     }
-    
+
     let data_slice = unsafe { std::slice::from_raw_parts(input.data, input.len) };
 
     match generate_proof_internal(data_slice) {
@@ -210,12 +216,12 @@ pub extern "C" fn verify_proof_ffi(input_ptr: *const Input, output_hash_ptr: *co
     if input_ptr.is_null() || output_hash_ptr.is_null() {
         return -1;
     }
-    
+
     let input = unsafe { &*input_ptr };
     if input.data.is_null() {
         return -2;
     }
-    
+
     let output = unsafe { &*output_hash_ptr };
     let data_slice = unsafe { std::slice::from_raw_parts(input.data, input.len) };
 
@@ -256,13 +262,13 @@ mod tests {
     fn test_sha256_hash_computation() {
         let data = b"hello world";
         let output = generate_proof_slice(data);
-        
+
         // Verify hash computation
         use sha2::{Digest, Sha256};
         let mut hasher = Sha256::new();
         hasher.update(data);
         let expected: [u8; 32] = hasher.finalize().into();
-        
+
         assert_eq!(output.hash, expected);
         assert_eq!(output.len, data.len());
     }
@@ -290,7 +296,8 @@ mod tests {
         assert_eq!(result, 0);
         assert_eq!(output.len, data.len());
 
-        let verify_result = unsafe { verify_proof_ffi(&input as *const Input, &output as *const Output) };
+        let verify_result =
+            unsafe { verify_proof_ffi(&input as *const Input, &output as *const Output) };
         assert_eq!(verify_result, 0);
     }
 }

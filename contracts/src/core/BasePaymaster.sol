@@ -39,11 +39,7 @@ abstract contract BasePaymaster is IPaymaster {
      * @notice Post-operation handler
      * @dev Must verify the caller is the entryPoint
      */
-    function postOp(
-        PostOpMode mode,
-        bytes calldata context,
-        uint256 actualGasCost
-    ) external override {
+    function postOp(PostOpMode mode, bytes calldata context, uint256 actualGasCost) external override {
         _requireFromEntryPoint();
         _postOp(mode, context, actualGasCost);
     }
@@ -70,11 +66,7 @@ abstract contract BasePaymaster is IPaymaster {
      * @param context The context from validation
      * @param actualGasCost The actual gas cost
      */
-    function _postOp(
-        PostOpMode mode,
-        bytes calldata context,
-        uint256 actualGasCost
-    ) internal virtual {
+    function _postOp(PostOpMode mode, bytes calldata context, uint256 actualGasCost) internal virtual {
         // Default implementation does nothing
         mode; // silence unused variable warning
         context; // silence unused variable warning
@@ -102,7 +94,7 @@ abstract contract BasePaymaster is IPaymaster {
      * @param unstakeDelaySec The unstake delay in seconds
      */
     function addStake(uint32 unstakeDelaySec) external payable {
-        entryPoint.addStake{value: msg.value}(unstakeDelaySec);
+        entryPoint.addStake{ value: msg.value }(unstakeDelaySec);
     }
 
     /**
@@ -128,13 +120,11 @@ abstract contract BasePaymaster is IPaymaster {
      * @return unstakeDelaySec The unstake delay
      * @return withdrawTime The withdraw time
      */
-    function getDeposit() public view returns (
-        uint256 deposit,
-        bool staked,
-        uint112 stake,
-        uint32 unstakeDelaySec,
-        uint48 withdrawTime
-    ) {
+    function getDeposit()
+        public
+        view
+        returns (uint256 deposit, bool staked, uint112 stake, uint32 unstakeDelaySec, uint48 withdrawTime)
+    {
         return entryPoint.getDepositInfo(address(this));
     }
 
@@ -145,18 +135,12 @@ abstract contract BasePaymaster is IPaymaster {
      * @param validUntil Valid until timestamp (6 bytes)
      * @return Packed validation data
      */
-    function packSigTimeRange(
-        bool sigFailed,
-        uint48 validAfter,
-        uint48 validUntil
-    ) internal pure returns (uint256) {
-        return (sigFailed ? 1 : 0) |
-            (uint256(validUntil) << 160) |
-            (uint256(validAfter) << (160 + 48));
+    function packSigTimeRange(bool sigFailed, uint48 validAfter, uint48 validUntil) internal pure returns (uint256) {
+        return (sigFailed ? 1 : 0) | (uint256(validUntil) << 160) | (uint256(validAfter) << (160 + 48));
     }
 
     /// @notice Deposit funds to the paymaster's stake
     receive() external payable {
-        entryPoint.depositTo{value: msg.value}(address(this));
+        entryPoint.depositTo{ value: msg.value }(address(this));
     }
-} 
+}

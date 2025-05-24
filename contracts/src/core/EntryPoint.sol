@@ -49,23 +49,24 @@ contract EntryPoint is IEntryPoint, StakeManager, ReentrancyGuard, ERC165 {
      * @param ops Array of operations to execute
      * @param beneficiary Address to receive gas payments
      */
-    function handleOps(
-        UserOperationLib.UserOperation[] calldata ops,
-        address payable beneficiary
-    ) external nonReentrant {
+    function handleOps(UserOperationLib.UserOperation[] calldata ops, address payable beneficiary)
+        external
+        nonReentrant
+    {
         uint256 opslen = ops.length;
         uint256 totalGasCost = 0;
 
         unchecked {
             for (uint256 i = 0; i < opslen; i++) {
                 uint256 gasBefore = gasleft();
-                
+
                 totalGasCost += _handleOperation(ops[i], beneficiary);
-                
+
                 uint256 gasUsed = gasBefore - gasleft();
                 if (gasUsed > ops[i].callGasLimit + ops[i].verificationGasLimit + VERIFICATION_GAS_OVERHEAD) {
                     // Penalize bundler for providing insufficient gas limit
-                    uint256 penalty = (gasUsed - ops[i].callGasLimit - ops[i].verificationGasLimit) * UNUSED_GAS_PENALTY_PERCENT / 100;
+                    uint256 penalty =
+                        (gasUsed - ops[i].callGasLimit - ops[i].verificationGasLimit) * UNUSED_GAS_PENALTY_PERCENT / 100;
                     totalGasCost += penalty;
                 }
             }
@@ -73,7 +74,7 @@ contract EntryPoint is IEntryPoint, StakeManager, ReentrancyGuard, ERC165 {
 
         // Transfer collected fees to beneficiary
         if (totalGasCost > 0) {
-            (bool success, ) = beneficiary.call{value: totalGasCost}("");
+            (bool success,) = beneficiary.call{ value: totalGasCost }("");
             require(success, "EntryPoint: beneficiary transfer failed");
         }
     }
@@ -84,13 +85,13 @@ contract EntryPoint is IEntryPoint, StakeManager, ReentrancyGuard, ERC165 {
      * @param beneficiary The beneficiary for gas payment
      * @return actualGasCost The actual gas cost of the operation
      */
-    function _handleOperation(
-        UserOperationLib.UserOperation calldata userOp,
-        address payable beneficiary
-    ) private returns (uint256 actualGasCost) {
+    function _handleOperation(UserOperationLib.UserOperation calldata userOp, address payable beneficiary)
+        private
+        returns (uint256 actualGasCost)
+    {
         uint256 preGas = gasleft();
         bytes32 userOpHash = getUserOpHash(userOp);
-        
+
         // Create memory struct for gas efficiency
         MemoryUserOp memory mUserOp = MemoryUserOp({
             sender: userOp.sender,
@@ -105,10 +106,10 @@ contract EntryPoint is IEntryPoint, StakeManager, ReentrancyGuard, ERC165 {
 
         // Calculate required prefund
         uint256 requiredPrefund = _getRequiredPrefund(mUserOp);
-        
+
         // Validate and execute
         (bool success, uint256 validationData) = _validateOperation(userOp, userOpHash, requiredPrefund);
-        
+
         if (!success) {
             revert FailedOp(0, "AA13 initCode failed or OOG");
         }
@@ -116,7 +117,7 @@ contract EntryPoint is IEntryPoint, StakeManager, ReentrancyGuard, ERC165 {
         // Check time range
         uint256 validAfter = validationData >> (160 + 48);
         uint256 validUntil = (validationData >> 160) & ((1 << 48) - 1);
-        
+
         if (block.timestamp < validAfter || (validUntil != 0 && block.timestamp > validUntil)) {
             revert FailedOp(0, "AA22 expired or not due");
         }
@@ -133,23 +134,10 @@ contract EntryPoint is IEntryPoint, StakeManager, ReentrancyGuard, ERC165 {
         bool callSuccess = _executeUserOp(userOp, mUserOp);
 
         // Calculate actual gas cost
-        actualGasCost = _handlePostOp(
-            userOp,
-            mUserOp,
-            userOpHash,
-            actualGasCost,
-            preGas,
-            callSuccess
-        );
+        actualGasCost = _handlePostOp(userOp, mUserOp, userOpHash, actualGasCost, preGas, callSuccess);
 
         emit UserOperationEvent(
-            userOpHash,
-            mUserOp.sender,
-            mUserOp.paymaster,
-            mUserOp.nonce,
-            callSuccess,
-            actualGasCost,
-            preGas - gasleft()
+            userOpHash, mUserOp.sender, mUserOp.paymaster, mUserOp.nonce, callSuccess, actualGasCost, preGas - gasleft()
         );
     }
 
@@ -167,10 +155,10 @@ contract EntryPoint is IEntryPoint, StakeManager, ReentrancyGuard, ERC165 {
             if (factory == address(0)) {
                 revert FailedOp(0, "AA13 initCode failed");
             }
-            
+
             if (userOp.sender.code.length == 0) {
                 // Deploy the sender
-                (success, ) = factory.call(userOp.initCode[20:]);
+                (success,) = factory.call(userOp.initCode[20:]);
                 if (!success || userOp.sender.code.length == 0) {
                     revert FailedOp(0, "AA13 initCode failed");
                 }
@@ -179,10 +167,8 @@ contract EntryPoint is IEntryPoint, StakeManager, ReentrancyGuard, ERC165 {
         }
 
         // Validate with account
-        try IAccount(userOp.sender).validateUserOp{gas: userOp.verificationGasLimit}(
-            userOp,
-            userOpHash,
-            requiredPrefund
+        try IAccount(userOp.sender).validateUserOp{ gas: userOp.verificationGasLimit }(
+            userOp, userOpHash, requiredPrefund
         ) returns (uint256 _validationData) {
             validationData = _validationData;
             success = true;
@@ -194,17 +180,15 @@ contract EntryPoint is IEntryPoint, StakeManager, ReentrancyGuard, ERC165 {
     /**
      * @notice Execute the user operation call
      */
-    function _executeUserOp(
-        UserOperationLib.UserOperation calldata userOp,
-        MemoryUserOp memory mUserOp
-    ) private returns (bool success) {
+    function _executeUserOp(UserOperationLib.UserOperation calldata userOp, MemoryUserOp memory mUserOp)
+        private
+        returns (bool success)
+    {
         uint256 callGasLimit = mUserOp.callGasLimit;
-        
-        try this.innerHandleOp{gas: callGasLimit}(
-            userOp.callData,
-            mUserOp.sender,
-            callGasLimit
-        ) returns (bool _success) {
+
+        try this.innerHandleOp{ gas: callGasLimit }(userOp.callData, mUserOp.sender, callGasLimit) returns (
+            bool _success
+        ) {
             success = _success;
         } catch {
             success = false;
@@ -214,15 +198,14 @@ contract EntryPoint is IEntryPoint, StakeManager, ReentrancyGuard, ERC165 {
     /**
      * @notice Inner handle operation - executes the actual call
      */
-    function innerHandleOp(
-        bytes calldata callData,
-        address sender,
-        uint256 callGasLimit
-    ) external returns (bool success) {
+    function innerHandleOp(bytes calldata callData, address sender, uint256 callGasLimit)
+        external
+        returns (bool success)
+    {
         require(msg.sender == address(this), "EntryPoint: invalid caller");
-        
+
         uint256 gasUsed = callGasLimit - gasleft();
-        (success, ) = sender.call{gas: callGasLimit - gasUsed - CALL_GAS_OVERHEAD}(callData);
+        (success,) = sender.call{ gas: callGasLimit - gasUsed - CALL_GAS_OVERHEAD }(callData);
     }
 
     /**
@@ -237,24 +220,19 @@ contract EntryPoint is IEntryPoint, StakeManager, ReentrancyGuard, ERC165 {
         bool callSuccess
     ) private returns (uint256) {
         uint256 gasUsed = preGas - gasleft() + userOp.preVerificationGas;
-        
+
         // Add gas overhead
         if (userOp.paymasterAndData.length > 0) {
             gasUsed += 50000; // Paymaster overhead
         }
-        
+
         actualGasCost = gasUsed * mUserOp.maxFeePerGas;
-        
+
         // Handle paymaster postOp if exists
         if (mUserOp.paymaster != address(0)) {
-            _handlePaymasterPostOp(
-                userOp,
-                userOpHash,
-                actualGasCost,
-                callSuccess
-            );
+            _handlePaymasterPostOp(userOp, userOpHash, actualGasCost, callSuccess);
         }
-        
+
         return actualGasCost;
     }
 
@@ -268,16 +246,11 @@ contract EntryPoint is IEntryPoint, StakeManager, ReentrancyGuard, ERC165 {
         bool callSuccess
     ) private {
         address paymaster = _getPaymaster(userOp.paymasterAndData);
-        
-        IPaymaster.PostOpMode mode = callSuccess 
-            ? IPaymaster.PostOpMode.opSucceeded 
-            : IPaymaster.PostOpMode.opReverted;
-            
-        try IPaymaster(paymaster).postOp{gas: userOp.verificationGasLimit}(
-            mode,
-            "",
-            actualGasCost
-        ) {} catch {
+
+        IPaymaster.PostOpMode mode = callSuccess ? IPaymaster.PostOpMode.opSucceeded : IPaymaster.PostOpMode.opReverted;
+
+        try IPaymaster(paymaster).postOp{ gas: userOp.verificationGasLimit }(mode, "", actualGasCost) { }
+        catch {
             // postOp failed - paymaster pays
         }
     }
@@ -292,9 +265,7 @@ contract EntryPoint is IEntryPoint, StakeManager, ReentrancyGuard, ERC165 {
     /**
      * @notice Get user operation hash
      */
-    function getUserOpHash(
-        UserOperationLib.UserOperation calldata userOp
-    ) public view returns (bytes32) {
+    function getUserOpHash(UserOperationLib.UserOperation calldata userOp) public view returns (bytes32) {
         return userOp.getUserOpHash(address(this), block.chainid);
     }
 
@@ -328,11 +299,11 @@ contract EntryPoint is IEntryPoint, StakeManager, ReentrancyGuard, ERC165 {
     function _validateAndUpdateNonce(address sender, uint256 nonce) private returns (bool) {
         (uint192 key, uint64 seq) = UserOperationLib.unpackNonce(nonce);
         uint256 currentNonce = nonceSequenceNumber[sender][key];
-        
+
         if (seq != currentNonce) {
             return false;
         }
-        
+
         nonceSequenceNumber[sender][key] = currentNonce + 1;
         return true;
     }
@@ -350,4 +321,4 @@ contract EntryPoint is IEntryPoint, StakeManager, ReentrancyGuard, ERC165 {
     receive() external payable {
         // Accept ETH for prefunding operations
     }
-} 
+}

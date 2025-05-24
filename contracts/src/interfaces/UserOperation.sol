@@ -40,18 +40,20 @@ library UserOperationLib {
      * @return The hash of the user operation
      */
     function hash(UserOperation memory userOp) internal pure returns (bytes32) {
-        return keccak256(abi.encode(
-            userOp.sender,
-            userOp.nonce,
-            keccak256(userOp.initCode),
-            keccak256(userOp.callData),
-            userOp.callGasLimit,
-            userOp.verificationGasLimit,
-            userOp.preVerificationGas,
-            userOp.maxFeePerGas,
-            userOp.maxPriorityFeePerGas,
-            keccak256(userOp.paymasterAndData)
-        ));
+        return keccak256(
+            abi.encode(
+                userOp.sender,
+                userOp.nonce,
+                keccak256(userOp.initCode),
+                keccak256(userOp.callData),
+                userOp.callGasLimit,
+                userOp.verificationGasLimit,
+                userOp.preVerificationGas,
+                userOp.maxFeePerGas,
+                userOp.maxPriorityFeePerGas,
+                keccak256(userOp.paymasterAndData)
+            )
+        );
     }
 
     /**
@@ -61,11 +63,11 @@ library UserOperationLib {
      * @param chainId The chain id
      * @return The packed hash
      */
-    function getUserOpHash(
-        UserOperation memory userOp,
-        address entryPoint,
-        uint256 chainId
-    ) internal pure returns (bytes32) {
+    function getUserOpHash(UserOperation memory userOp, address entryPoint, uint256 chainId)
+        internal
+        pure
+        returns (bytes32)
+    {
         return keccak256(abi.encode(hash(userOp), entryPoint, chainId));
     }
 
@@ -89,4 +91,4 @@ library UserOperationLib {
     function packNonce(uint192 key, uint64 sequence) internal pure returns (uint256 nonce) {
         nonce = (uint256(key) << 64) | uint256(sequence);
     }
-} 
+}

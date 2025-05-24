@@ -74,17 +74,10 @@ contract MultiSigAccount is BaseAccount, Initializable, UUPSUpgradeable {
      * @param values Array of values
      * @param datas Array of call data
      */
-    function executeBatch(
-        address[] calldata targets,
-        uint256[] calldata values,
-        bytes[] calldata datas
-    ) external {
+    function executeBatch(address[] calldata targets, uint256[] calldata values, bytes[] calldata datas) external {
         _requireFromEntryPointOrSelf();
-        require(
-            targets.length == values.length && values.length == datas.length,
-            "MultiSigAccount: length mismatch"
-        );
-        
+        require(targets.length == values.length && values.length == datas.length, "MultiSigAccount: length mismatch");
+
         for (uint256 i = 0; i < targets.length; i++) {
             _execute(targets[i], values[i], datas[i]);
         }
@@ -105,12 +98,12 @@ contract MultiSigAccount is BaseAccount, Initializable, UUPSUpgradeable {
     function _setSigners(address[] calldata _signers, uint256 _threshold) internal {
         require(_signers.length > 0, "MultiSigAccount: no signers");
         require(_threshold > 0 && _threshold <= _signers.length, "MultiSigAccount: invalid threshold");
-        
+
         // Remove old signers
         for (uint256 i = 0; i < signers.length; i++) {
             isSigner[signers[i]] = false;
         }
-        
+
         // Set new signers
         delete signers;
         for (uint256 i = 0; i < _signers.length; i++) {
@@ -119,7 +112,7 @@ contract MultiSigAccount is BaseAccount, Initializable, UUPSUpgradeable {
             signers.push(_signers[i]);
             isSigner[_signers[i]] = true;
         }
-        
+
         threshold = _threshold;
         emit SignersUpdated(_signers, _threshold);
     }
@@ -128,7 +121,7 @@ contract MultiSigAccount is BaseAccount, Initializable, UUPSUpgradeable {
      * @notice Internal execute function
      */
     function _execute(address target, uint256 value, bytes memory data) internal {
-        (bool success, bytes memory result) = target.call{value: value}(data);
+        (bool success, bytes memory result) = target.call{ value: value }(data);
         if (!success) {
             if (result.length > 0) {
                 assembly {
@@ -151,38 +144,40 @@ contract MultiSigAccount is BaseAccount, Initializable, UUPSUpgradeable {
      * @notice Validate the signature
      * @dev Validates multi-signature
      */
-    function _validateSignature(
-        UserOperationLib.UserOperation calldata userOp,
-        bytes32 userOpHash
-    ) internal virtual override returns (uint256) {
+    function _validateSignature(UserOperationLib.UserOperation calldata userOp, bytes32 userOpHash)
+        internal
+        virtual
+        override
+        returns (uint256)
+    {
         bytes32 hash = userOpHash.toEthSignedMessageHash();
         bytes memory signatures = userOp.signature;
-        
+
         // Check signature length (65 bytes per signature)
         if (signatures.length != threshold * 65) {
             return SIG_VALIDATION_FAILED;
         }
-        
+
         address lastSigner = address(0);
-        
+
         for (uint256 i = 0; i < threshold; i++) {
             // Extract signature
             bytes memory signature = new bytes(65);
             for (uint256 j = 0; j < 65; j++) {
                 signature[j] = signatures[i * 65 + j];
             }
-            
+
             // Recover signer
             address signer = hash.recover(signature);
-            
+
             // Check if valid signer and ordered (prevent duplicates)
             if (!isSigner[signer] || signer <= lastSigner) {
                 return SIG_VALIDATION_FAILED;
             }
-            
+
             lastSigner = signer;
         }
-        
+
         return SIG_VALIDATION_SUCCESS;
     }
 
@@ -200,7 +195,7 @@ contract MultiSigAccount is BaseAccount, Initializable, UUPSUpgradeable {
      * @notice Authorize an upgrade
      * @dev Only self can upgrade
      */
-    function _authorizeUpgrade(address newImplementation) internal override onlySelf {}
+    function _authorizeUpgrade(address newImplementation) internal override onlySelf { }
 
     /**
      * @notice Get signers count
@@ -213,7 +208,7 @@ contract MultiSigAccount is BaseAccount, Initializable, UUPSUpgradeable {
      * @notice Deposit to the account
      */
     function addDeposit() public payable {
-        entryPoint().depositTo{value: msg.value}(address(this));
+        entryPoint().depositTo{ value: msg.value }(address(this));
     }
 
     /**
@@ -235,5 +230,5 @@ contract MultiSigAccount is BaseAccount, Initializable, UUPSUpgradeable {
     /**
      * @notice Receive ETH
      */
-    receive() external payable {}
-} 
+    receive() external payable { }
+}

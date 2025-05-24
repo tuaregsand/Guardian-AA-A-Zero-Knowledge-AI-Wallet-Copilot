@@ -24,4 +24,4 @@ interface IAccount {
         bytes32 userOpHash,
         uint256 missingAccountFunds
     ) external returns (uint256 validationData);
-} 
+}

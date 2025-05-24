@@ -1,9 +1,9 @@
 use guardian_zkml::{
-    generate_proof_slice, verify_proof_slice, Input, Output, generate_proof,
-    verify_proof_ffi, bytes_required,
+    bytes_required, generate_proof, generate_proof_slice, verify_proof_ffi, verify_proof_slice,
+    Input, Output,
 };
-use sha2::{Sha256, Digest};
 use hex;
+use sha2::{Digest, Sha256};
 
 #[test]
 fn test_proof_round_trip() {
@@ -20,8 +20,14 @@ fn test_proof_round_trip() {
 #[test]
 fn test_generate_proof_ffi() {
     let data = b"ffi test";
-    let input = Input { data: data.as_ptr(), len: data.len() };
-    let mut output = Output { len: 0, hash: [0u8; 32] };
+    let input = Input {
+        data: data.as_ptr(),
+        len: data.len(),
+    };
+    let mut output = Output {
+        len: 0,
+        hash: [0u8; 32],
+    };
     let ret = unsafe { generate_proof(&input as *const Input, &mut output as *mut Output) };
     assert_eq!(ret, 0);
     assert_eq!(output.len, data.len());
@@ -44,9 +50,10 @@ fn test_empty_input() {
     let data = b"";
     let out = generate_proof_slice(data);
     assert_eq!(out.len, 0);
-    
+
     // Verify against known SHA256 of empty string
-    let expected_hash = hex::decode("e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855").unwrap();
+    let expected_hash =
+        hex::decode("e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855").unwrap();
     assert_eq!(out.hash.as_slice(), expected_hash.as_slice());
     assert!(verify_proof_slice(data, &out));
 }
@@ -64,13 +71,13 @@ fn test_various_input_sizes() {
     for data in test_cases {
         let out = generate_proof_slice(&data);
         assert_eq!(out.len, data.len());
-        
+
         // Verify hash computation
         let mut hasher = Sha256::new();
         hasher.update(&data);
         let expected = hasher.finalize();
         assert_eq!(out.hash.as_slice(), expected.as_slice());
-        
+
         assert!(verify_proof_slice(&data, &out));
     }
 }

@@ -14,13 +14,13 @@ abstract contract BaseAccount is IAccount {
     using UserOperationLib for UserOperationLib.UserOperation;
 
     /// @notice Signature validation failed
-    uint256 constant internal SIG_VALIDATION_FAILED = 1;
+    uint256 internal constant SIG_VALIDATION_FAILED = 1;
 
     /**
      * @notice Return value in case of signature validation success
      * @dev Equivalent to packSigTimeRange(true, 0, 0);
      */
-    uint256 constant internal SIG_VALIDATION_SUCCESS = 0;
+    uint256 internal constant SIG_VALIDATION_SUCCESS = 0;
 
     /**
      * @notice Validate user operation
@@ -51,10 +51,10 @@ abstract contract BaseAccount is IAccount {
      * @return validationData 0 for valid signature, 1 for invalid signature,
      *                        otherwise packed ValidAfter and ValidUntil
      */
-    function _validateSignature(
-        UserOperationLib.UserOperation calldata userOp,
-        bytes32 userOpHash
-    ) internal virtual returns (uint256 validationData);
+    function _validateSignature(UserOperationLib.UserOperation calldata userOp, bytes32 userOpHash)
+        internal
+        virtual
+        returns (uint256 validationData);
 
     /**
      * @notice Validate the nonce of the user operation
@@ -72,10 +72,7 @@ abstract contract BaseAccount is IAccount {
      */
     function _payPrefund(uint256 missingAccountFunds) internal virtual {
         if (missingAccountFunds != 0) {
-            (bool success, ) = payable(msg.sender).call{
-                value: missingAccountFunds,
-                gas: type(uint256).max
-            }("");
+            (bool success,) = payable(msg.sender).call{ value: missingAccountFunds, gas: type(uint256).max }("");
             require(success, "BaseAccount: prefund failed");
         }
     }
@@ -84,10 +81,7 @@ abstract contract BaseAccount is IAccount {
      * @notice Ensure the caller is the entryPoint
      */
     function _requireFromEntryPoint() internal view virtual {
-        require(
-            msg.sender == address(entryPoint()),
-            "BaseAccount: not from EntryPoint"
-        );
+        require(msg.sender == address(entryPoint()), "BaseAccount: not from EntryPoint");
     }
 
     /**
@@ -105,9 +99,7 @@ abstract contract BaseAccount is IAccount {
      * @param userOp The user operation
      * @return The hash of the user operation
      */
-    function getUserOpHash(
-        UserOperationLib.UserOperation calldata userOp
-    ) public view returns (bytes32) {
+    function getUserOpHash(UserOperationLib.UserOperation calldata userOp) public view returns (bytes32) {
         return userOp.getUserOpHash(address(entryPoint()), block.chainid);
     }
 
@@ -118,14 +110,8 @@ abstract contract BaseAccount is IAccount {
      * @param validUntil Valid until timestamp (6 bytes)
      * @return Packed validation data
      */
-    function packSigTimeRange(
-        bool sigFailed,
-        uint48 validAfter,
-        uint48 validUntil
-    ) internal pure returns (uint256) {
-        return (sigFailed ? 1 : 0) |
-            (uint256(validUntil) << 160) |
-            (uint256(validAfter) << (160 + 48));
+    function packSigTimeRange(bool sigFailed, uint48 validAfter, uint48 validUntil) internal pure returns (uint256) {
+        return (sigFailed ? 1 : 0) | (uint256(validUntil) << 160) | (uint256(validAfter) << (160 + 48));
     }
 
     /**
@@ -136,4 +122,4 @@ abstract contract BaseAccount is IAccount {
     function getNonce(uint192 key) public view returns (uint256) {
         return entryPoint().getNonce(address(this), key);
     }
-} 
+}

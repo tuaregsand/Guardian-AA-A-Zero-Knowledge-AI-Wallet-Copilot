@@ -77,13 +77,10 @@ interface IStakeManager {
      * @return unstakeDelaySec The unstake delay in seconds
      * @return withdrawTime The time when withdrawal is allowed
      */
-    function getDepositInfo(address account) external view returns (
-        uint256 deposit,
-        bool staked,
-        uint112 stake,
-        uint32 unstakeDelaySec,
-        uint48 withdrawTime
-    );
+    function getDepositInfo(address account)
+        external
+        view
+        returns (uint256 deposit, bool staked, uint112 stake, uint32 unstakeDelaySec, uint48 withdrawTime);
 
     /**
      * @notice Get the balance of an account
@@ -97,4 +94,4 @@ interface IStakeManager {
      * @param account The account to deposit for
      */
     function depositTo(address account) external payable;
-} 
+}

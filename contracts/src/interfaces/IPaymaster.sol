@@ -43,9 +43,5 @@ interface IPaymaster {
      * @param context The context returned by validatePaymasterUserOp
      * @param actualGasCost The actual gas cost of the operation
      */
-    function postOp(
-        PostOpMode mode,
-        bytes calldata context,
-        uint256 actualGasCost
-    ) external;
-} 
+    function postOp(PostOpMode mode, bytes calldata context, uint256 actualGasCost) external;
+}

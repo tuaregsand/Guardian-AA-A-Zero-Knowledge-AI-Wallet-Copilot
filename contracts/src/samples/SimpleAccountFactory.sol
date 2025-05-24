@@ -33,10 +33,13 @@ contract SimpleAccountFactory {
         if (codeSize > 0) {
             return SimpleAccount(payable(addr));
         }
-        ret = SimpleAccount(payable(new ERC1967Proxy{salt: bytes32(salt)}(
-            address(accountImplementation),
-            abi.encodeCall(SimpleAccount.initialize, (owner))
-        )));
+        ret = SimpleAccount(
+            payable(
+                new ERC1967Proxy{ salt: bytes32(salt) }(
+                    address(accountImplementation), abi.encodeCall(SimpleAccount.initialize, (owner))
+                )
+            )
+        );
     }
 
     /**
@@ -51,13 +54,10 @@ contract SimpleAccountFactory {
             keccak256(
                 abi.encodePacked(
                     type(ERC1967Proxy).creationCode,
-                    abi.encode(
-                        address(accountImplementation),
-                        abi.encodeCall(SimpleAccount.initialize, (owner))
-                    )
+                    abi.encode(address(accountImplementation), abi.encodeCall(SimpleAccount.initialize, (owner)))
                 )
             ),
             address(this)
         );
     }
-} 
+}

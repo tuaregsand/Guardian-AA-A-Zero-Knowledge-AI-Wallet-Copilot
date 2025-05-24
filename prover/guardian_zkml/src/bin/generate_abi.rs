@@ -89,8 +89,11 @@ fn main() -> std::io::Result<()> {
 
     // Determine the path relative to the crate root
     let output_path = Path::new(env!("CARGO_MANIFEST_DIR")).join("abi.json");
-    
-    println!("Generating comprehensive ABI documentation at: {:?}", output_path);
+
+    println!(
+        "Generating comprehensive ABI documentation at: {:?}",
+        output_path
+    );
 
     let mut file = File::create(&output_path)?;
     file.write_all(abi_json.as_bytes())?;
@@ -99,6 +102,6 @@ fn main() -> std::io::Result<()> {
     println!("Public inputs: 32 field elements (one per hash byte)");
     println!("Private inputs: Variable-length byte array");
     println!("Performance target: < 500ms proof generation");
-    
+
     Ok(())
-} 
+}

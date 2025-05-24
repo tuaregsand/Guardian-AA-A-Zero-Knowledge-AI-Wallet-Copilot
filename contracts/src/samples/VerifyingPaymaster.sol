@@ -42,17 +42,17 @@ contract VerifyingPaymaster is BasePaymaster {
         uint256 maxCost
     ) internal virtual override returns (bytes memory context, uint256 validationData) {
         (maxCost); // silence unused variable warning
-        
+
         // Decode paymaster data
         require(userOp.paymasterAndData.length >= 20 + 32 + 65, "VerifyingPaymaster: invalid data length");
-        
+
         // Extract nonce and signature directly from calldata
         uint256 nonce = uint256(bytes32(userOp.paymasterAndData[20:52]));
         bytes memory signature = userOp.paymasterAndData[52:];
-        
+
         // Check nonce
         require(nonces[userOp.sender] == nonce, "VerifyingPaymaster: invalid nonce");
-        
+
         // Create hash to sign
         bytes32 hash = keccak256(
             abi.encode(
@@ -70,17 +70,17 @@ contract VerifyingPaymaster is BasePaymaster {
                 block.chainid
             )
         );
-        
+
         // Verify signature
         address signer = hash.toEthSignedMessageHash().recover(signature);
-        
+
         if (signer != verifyingSigner) {
             return ("", 1); // Signature validation failed
         }
-        
+
         // Increment nonce to prevent replay
         nonces[userOp.sender]++;
-        
+
         // Return empty context and success
         return ("", 0);
     }
@@ -89,11 +89,7 @@ contract VerifyingPaymaster is BasePaymaster {
      * @notice Post-operation handler
      * @dev Deduct gas cost from paymaster deposit and send to signer
      */
-    function _postOp(
-        PostOpMode mode,
-        bytes calldata context,
-        uint256 actualGasCost
-    ) internal override {
+    function _postOp(PostOpMode mode, bytes calldata context, uint256 actualGasCost) internal override {
         // Deduct gas cost from paymaster deposit and send to signer
         withdrawTo(payable(verifyingSigner), actualGasCost);
     }
@@ -127,4 +123,4 @@ contract VerifyingPaymaster is BasePaymaster {
         uint256 nonce = nonces[account];
         return abi.encodePacked(address(this), nonce, signature);
     }
-} 
+}

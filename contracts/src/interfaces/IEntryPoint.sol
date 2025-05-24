@@ -32,10 +32,7 @@ interface IEntryPoint is IStakeManager {
      * @param paymaster Paymaster used for the operation (if any)
      */
     event BeforeExecution(
-        bytes32 indexed userOpHash,
-        address indexed sender,
-        address indexed factory,
-        address paymaster
+        bytes32 indexed userOpHash, address indexed sender, address indexed factory, address paymaster
     );
 
     /**
@@ -66,10 +63,7 @@ interface IEntryPoint is IStakeManager {
      * @param revertReason The revert reason
      */
     event UserOperationRevertReason(
-        bytes32 indexed userOpHash,
-        address indexed sender,
-        uint256 nonce,
-        bytes revertReason
+        bytes32 indexed userOpHash, address indexed sender, uint256 nonce, bytes revertReason
     );
 
     /**
@@ -79,22 +73,14 @@ interface IEntryPoint is IStakeManager {
      * @param factory Factory used to deploy the account
      * @param paymaster Paymaster used for the operation (if any)
      */
-    event AccountDeployed(
-        bytes32 indexed userOpHash,
-        address indexed sender,
-        address factory,
-        address paymaster
-    );
+    event AccountDeployed(bytes32 indexed userOpHash, address indexed sender, address factory, address paymaster);
 
     /**
      * @notice Execute a batch of user operations
      * @param ops Array of user operations to execute
      * @param beneficiary Address to receive the gas payment
      */
-    function handleOps(
-        UserOperationLib.UserOperation[] calldata ops,
-        address payable beneficiary
-    ) external;
+    function handleOps(UserOperationLib.UserOperation[] calldata ops, address payable beneficiary) external;
 
     /**
      * @notice Get the nonce for a sender and key
@@ -109,7 +95,5 @@ interface IEntryPoint is IStakeManager {
      * @param userOp The user operation
      * @return The hash of the user operation
      */
-    function getUserOpHash(
-        UserOperationLib.UserOperation calldata userOp
-    ) external view returns (bytes32);
-} 
+    function getUserOpHash(UserOperationLib.UserOperation calldata userOp) external view returns (bytes32);
+}

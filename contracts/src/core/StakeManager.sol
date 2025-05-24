@@ -28,21 +28,13 @@ abstract contract StakeManager is IStakeManager {
     mapping(address => DepositInfo) private deposits;
 
     /// @notice Get deposit info for an account
-    function getDepositInfo(address account) public view returns (
-        uint256 deposit,
-        bool staked,
-        uint112 stake,
-        uint32 unstakeDelaySec,
-        uint48 withdrawTime
-    ) {
+    function getDepositInfo(address account)
+        public
+        view
+        returns (uint256 deposit, bool staked, uint112 stake, uint32 unstakeDelaySec, uint48 withdrawTime)
+    {
         DepositInfo storage info = deposits[account];
-        return (
-            info.deposit,
-            info.staked,
-            info.stake,
-            info.unstakeDelaySec,
-            info.withdrawTime
-        );
+        return (info.deposit, info.staked, info.stake, info.unstakeDelaySec, info.withdrawTime);
     }
 
     /// @notice Get balance of an account
@@ -78,7 +70,7 @@ abstract contract StakeManager is IStakeManager {
         require(info.withdrawTime == 0, "StakeManager: already unlocked");
 
         info.withdrawTime = uint48(block.timestamp + info.unstakeDelaySec);
-        
+
         emit StakeUnlocked(msg.sender, info.withdrawTime);
     }
 
@@ -95,7 +87,7 @@ abstract contract StakeManager is IStakeManager {
         info.staked = false;
         info.withdrawTime = 0;
 
-        (bool success, ) = withdrawAddress.call{value: stake}("");
+        (bool success,) = withdrawAddress.call{ value: stake }("");
         require(success, "StakeManager: withdraw failed");
 
         emit StakeWithdrawn(msg.sender, withdrawAddress, stake);
@@ -105,12 +97,12 @@ abstract contract StakeManager is IStakeManager {
     function withdrawTo(address payable withdrawAddress, uint256 withdrawAmount) external {
         DepositInfo storage info = deposits[msg.sender];
         require(withdrawAmount <= info.deposit, "StakeManager: insufficient deposit");
-        
+
         info.deposit -= withdrawAmount;
-        
-        (bool success, ) = withdrawAddress.call{value: withdrawAmount}("");
+
+        (bool success,) = withdrawAddress.call{ value: withdrawAmount }("");
         require(success, "StakeManager: withdraw failed");
-        
+
         emit Withdrawn(msg.sender, withdrawAddress, withdrawAmount);
     }
 
@@ -126,10 +118,7 @@ abstract contract StakeManager is IStakeManager {
     }
 
     /// @notice Get stake info
-    function getStakeInfo(address account) internal view returns (
-        uint112 stake,
-        uint32 unstakeDelaySec
-    ) {
+    function getStakeInfo(address account) internal view returns (uint112 stake, uint32 unstakeDelaySec) {
         DepositInfo storage info = deposits[account];
         return (info.stake, info.unstakeDelaySec);
     }
@@ -150,4 +139,4 @@ abstract contract StakeManager is IStakeManager {
         require(stake >= minStake, "StakeManager: stake too low");
         require(unstakeDelaySec >= minUnstakeDelay, "StakeManager: unstake delay too low");
     }
-} 
+}

@@ -16,11 +16,7 @@ interface ICrossChainAccount {
      * @param nonce Operation nonce
      */
     event CrossChainOperationInitiated(
-        uint256 indexed chainId,
-        address indexed target,
-        uint256 value,
-        bytes data,
-        uint256 nonce
+        uint256 indexed chainId, address indexed target, uint256 value, bytes data, uint256 nonce
     );
 
     /**
@@ -29,11 +25,7 @@ interface ICrossChainAccount {
      * @param nonce Operation nonce
      * @param success Whether the operation succeeded
      */
-    event CrossChainOperationExecuted(
-        uint256 indexed chainId,
-        uint256 indexed nonce,
-        bool success
-    );
+    event CrossChainOperationExecuted(uint256 indexed chainId, uint256 indexed nonce, bool success);
 
     /**
      * @notice Initiate a cross-chain operation
@@ -43,12 +35,9 @@ interface ICrossChainAccount {
      * @param data Call data
      * @return nonce The operation nonce
      */
-    function initiateCrossChainOperation(
-        uint256 chainId,
-        address target,
-        uint256 value,
-        bytes calldata data
-    ) external returns (uint256 nonce);
+    function initiateCrossChainOperation(uint256 chainId, address target, uint256 value, bytes calldata data)
+        external
+        returns (uint256 nonce);
 
     /**
      * @notice Execute a cross-chain operation
@@ -75,8 +64,8 @@ interface ICrossChainAccount {
      * @return executed Whether the operation was executed
      * @return success Whether the operation succeeded
      */
-    function getCrossChainOperationStatus(
-        uint256 chainId,
-        uint256 nonce
-    ) external view returns (bool executed, bool success);
-} 
+    function getCrossChainOperationStatus(uint256 chainId, uint256 nonce)
+        external
+        view
+        returns (bool executed, bool success);
+}

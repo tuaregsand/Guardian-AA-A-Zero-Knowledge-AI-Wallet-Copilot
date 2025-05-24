@@ -1,7 +1,7 @@
 use halo2_proofs::{
     circuit::{Layouter, SimpleFloorPlanner, Value},
-    plonk::{Advice, Circuit, Column, ConstraintSystem, Error, Instance},
     pasta::Fp,
+    plonk::{Advice, Circuit, Column, ConstraintSystem, Error, Instance},
 };
 
 // Simple circuit configuration
@@ -40,10 +40,7 @@ impl Circuit<Fp> for Sha256Circuit {
     }
 
     fn configure(meta: &mut ConstraintSystem<Fp>) -> Self::Config {
-        let advice = [
-            meta.advice_column(),
-            meta.advice_column(),
-        ];
+        let advice = [meta.advice_column(), meta.advice_column()];
         let instance = meta.instance_column();
 
         // Enable equality for advice and instance columns
@@ -52,10 +49,7 @@ impl Circuit<Fp> for Sha256Circuit {
         }
         meta.enable_equality(instance);
 
-        Sha256CircuitConfig {
-            advice,
-            instance,
-        }
+        Sha256CircuitConfig { advice, instance }
     }
 
     fn synthesize(
@@ -91,7 +85,7 @@ impl Circuit<Fp> for Sha256Circuit {
                     // Constrain the advice cell to equal the instance cell
                     region.constrain_equal(cell.cell(), instance_cell.cell())?;
                 }
-                
+
                 Ok(())
             },
         )?;
@@ -141,9 +135,11 @@ mod tests {
     fn test_hash_computation() {
         let circuit = Sha256Circuit::new(b"test".to_vec());
         let hash = circuit.expected_hash();
-        
+
         // Verify against known SHA256 hash
-        let expected = hex::decode("9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08").unwrap();
+        let expected =
+            hex::decode("9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")
+                .unwrap();
         assert_eq!(hash.as_slice(), expected.as_slice());
     }
 }
