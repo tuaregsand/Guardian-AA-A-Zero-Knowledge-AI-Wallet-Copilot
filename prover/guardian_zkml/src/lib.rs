@@ -144,6 +144,33 @@ pub fn verify_proof_ezkl(
     }
 }
 
+/// Convenience helper for tests to generate a proof from a byte slice.
+/// Returns the `Output` containing the original length and SHA256 hash.
+pub fn generate_proof_slice(data: &[u8]) -> Output {
+    match generate_proof_ezkl(data) {
+        Ok((hash, _proof)) => Output { len: data.len(), hash },
+        Err(e) => panic!("Error generating proof: {}", e),
+    }
+}
+
+/// Convenience helper for tests to verify a proof previously generated with
+/// `generate_proof_slice`. Proof bytes are read from `PROOF_PATH`.
+pub fn verify_proof_slice(data: &[u8], out: &Output) -> bool {
+    match std::fs::read(PROOF_PATH) {
+        Ok(proof_bytes) => match verify_proof_ezkl(data.len(), &out.hash, &proof_bytes) {
+            Ok(valid) => valid,
+            Err(e) => {
+                eprintln!("Error verifying proof: {}", e);
+                false
+            }
+        },
+        Err(e) => {
+            eprintln!("Failed to read proof file {}: {}", PROOF_PATH, e);
+            false
+        }
+    }
+}
+
 #[no_mangle]
 pub extern "C" fn generate_proof(input_ptr: *const Input, output_ptr: *mut Output) -> i32 {
     if input_ptr.is_null() || output_ptr.is_null() {
