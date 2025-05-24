@@ -70,6 +70,9 @@ impl ProvingSystem {
 }
 
 fn get_proving_system() -> Result<&'static ProvingSystem, String> {
+    // SAFETY: PROVING_SYSTEM is written once under `INIT_LOCK` and then only
+    // read after initialization is complete. Access is serialized through the
+    // `Once` primitive, so immutable references are safe here.
     unsafe {
         INIT_LOCK.call_once(|| match ProvingSystem::load_or_generate() {
             Ok(system) => {
@@ -189,15 +192,21 @@ pub extern "C" fn generate_proof(input_ptr: *const Input, output_ptr: *mut Outpu
         return -1;
     }
 
+    // SAFETY: `input_ptr` is checked for null above and assumed to point to a
+    // valid `Input` for the duration of this call.
     let input = unsafe { &*input_ptr };
     if input.data.is_null() {
         return -2;
     }
 
+    // SAFETY: `input.data` is checked for null and `input.len` bytes are
+    // available. The resulting slice lives only for this function call.
     let data_slice = unsafe { std::slice::from_raw_parts(input.data, input.len) };
 
     match generate_proof_internal(data_slice) {
         Ok((hash, _proof_bytes)) => {
+            // SAFETY: `output_ptr` was checked for null at the beginning of the
+            // function and is exclusively written to here.
             unsafe {
                 (*output_ptr).len = input.len;
                 (*output_ptr).hash = hash;
@@ -217,12 +226,18 @@ pub extern "C" fn verify_proof_ffi(input_ptr: *const Input, output_hash_ptr: *co
         return -1;
     }
 
+    // SAFETY: `input_ptr` is validated above and expected to remain valid for
+    // the duration of this call.
     let input = unsafe { &*input_ptr };
     if input.data.is_null() {
         return -2;
     }
 
+    // SAFETY: `output_hash_ptr` has been checked for null and points to a valid
+    // `Output` provided by the caller.
     let output = unsafe { &*output_hash_ptr };
+    // SAFETY: `input.data` is non-null and `input.len` bytes are available; the
+    // slice is confined to this call.
     let data_slice = unsafe { std::slice::from_raw_parts(input.data, input.len) };
 
     // For this simplified version, verify the hash computation
@@ -292,10 +307,15 @@ mod tests {
             hash: [0u8; 32],
         };
 
+        // SAFETY: `input` and `output` are stack allocated and valid for the
+        // duration of this test. Passing their pointers to the FFI boundary is
+        // safe here.
         let result = unsafe { generate_proof(&input as *const Input, &mut output as *mut Output) };
         assert_eq!(result, 0);
         assert_eq!(output.len, data.len());
 
+        // SAFETY: the pointers used here remain valid for this call just like
+        // above.
         let verify_result =
             unsafe { verify_proof_ffi(&input as *const Input, &output as *const Output) };
         assert_eq!(verify_result, 0);
