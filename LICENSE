@@ -1,0 +1,73 @@
+Guardian-AA Custom License
+
+Copyright (c) 2024 Guardian-AA Team (@tuaregsand)
+
+## Permissions
+
+You are granted permission to:
+- ✅ **Use** this software for personal, educational, and research purposes
+- ✅ **Study** the source code and learn from it
+- ✅ **Modify** the software for your own non-commercial use
+- ✅ **Distribute** the software for non-commercial purposes with proper attribution
+- ✅ **Contribute** back to the project via pull requests
+- ✅ **Build** open-source applications using this software
+
+## Requirements
+
+When using this software, you must:
+- 📝 **Provide attribution** to the Guardian-AA Team and link to the original repository
+- 🔗 **Include this license** in any distribution or derivative work
+- 📧 **Notify the maintainers** of significant usage by opening a GitHub issue or contacting @tuaregsand
+
+## Restrictions
+
+You are **NOT** permitted to:
+- 🚫 **Commercial Use**: Use this software for commercial purposes or financial gain without explicit written permission
+- 🚫 **Sell** this software or charge fees for access to it
+- 🚫 **Remove** copyright notices or license information
+- 🚫 **Use** the Guardian-AA name or branding without permission
+
+## Commercial Use Policy
+
+For commercial use, including but not limited to:
+- Building commercial products or services
+- Integration into proprietary software
+- Selling applications that use this code
+- Using in revenue-generating businesses
+
+You must:
+1. **Contact the maintainers** at https://x.com/0xtuareg
+2. **Obtain written permission** before commercial deployment
+3. **Negotiate terms** for commercial licensing (may include revenue sharing or licensing fees)
+4. **Provide regular updates** on how the software is being used
+
+## Attribution Requirements
+
+When using this software, include the following attribution:
+
+```
+Powered by Guardian-AA - Zero-Knowledge AI Wallet Copilot
+https://github.com/tuaregsand/Guardian-AA-A-Zero-Knowledge-AI-Wallet-Copilot
+Copyright (c) 2025 Guardian-AA Team
+```
+
+## Disclaimer
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+## Contact
+
+For commercial licensing inquiries or questions about this license:
+- GitHub: @tuaregsand
+- Twitter: https://x.com/0xtuareg  
+- Issues: https://github.com/tuaregsand/Guardian-AA-A-Zero-Knowledge-AI-Wallet-Copilot/issues
+
+---
+
+**Note**: This license allows the Guardian-AA Team to maintain control over commercial usage while encouraging open-source development and learning. All commercial use requires explicit permission and may involve licensing agreements. 

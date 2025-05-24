@@ -3,7 +3,7 @@
 # 🛡️ Guardian-AA
 ## *Zero-Knowledge AI Wallet Copilot*
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: Custom](https://img.shields.io/badge/License-Custom-orange.svg)](LICENSE)
 [![Rust](https://img.shields.io/badge/rust-1.70+-orange.svg)](https://www.rust-lang.org)
 [![Solidity](https://img.shields.io/badge/solidity-0.8.25-blue.svg)](https://soliditylang.org/)
 [![Foundry](https://img.shields.io/badge/Built%20with-Foundry-FFFBF3?logo=ethereum)](https://book.getfoundry.sh/)
@@ -65,18 +65,19 @@ Guardian-AA combines **zero-knowledge cryptography** with **intelligent automati
 |:------------------|:---------------|:-------------------|:--------------|
 | **🔐 ZK Proof System** | ✅ **Complete** | ~718ms proof generation | Production-ready, optimization in progress |
 | **⚡ Smart Contracts** | ✅ **Complete** | 5/5 tests passing | Full ERC-4337 implementation with gasless transactions |
-| **📚 SDK** | 🔄 **Phase 3** | - | Developer integration layer |
+| **📚 SDK** | ✅ **Complete** | 22/22 tests passing | Production-ready TypeScript SDK with comprehensive APIs |
 | **📱 Mobile App** | 🔄 **Phase 4** | - | iOS/Android applications |
 | **🤖 AI Assistant** | 🔬 **Research** | - | Natural language processing |
 
 </div>
 
-### 🎯 **Phase 2 Achievements** *(Recently Completed)*
-- ✅ Complete ERC-4337 Account Abstraction implementation  
-- ✅ Multi-signature wallet with dynamic signer management
-- ✅ Gasless transactions via VerifyingPaymaster
-- ✅ 100% test coverage (5/5 tests passing)
-- ✅ Gas-optimized operations (~30k gas average)
+### 🎯 **Phase 3 Achievements** *(Recently Completed)*
+- ✅ Complete TypeScript SDK with zero-knowledge integration
+- ✅ Account Abstraction APIs with gasless transaction support  
+- ✅ Multi-signature wallet SDK functionality
+- ✅ 100% test coverage (22/22 tests passing)
+- ✅ Developer-friendly APIs with comprehensive documentation
+- ✅ Cross-platform support (CJS + ESM + TypeScript definitions)
 
 ## 🏗 **Architecture Overview**
 
@@ -261,7 +262,7 @@ Guardian-AA-A-Zero-Knowledge-AI-Wallet-Copilot/
 |:-----------------|:---------------|:--------------|:-------------|
 | `prover/` | Zero-Knowledge proof generation | ✅ Complete | ✅ Passing |
 | `contracts/` | ERC-4337 smart contracts | ✅ Complete | ✅ 5/5 |
-| `sdk/` | Developer integration tools | 🔄 Phase 3 | 📋 Planned |
+| `sdk/` | Developer integration tools | ✅ Complete | ✅ 22/22 |
 | `mobile/` | iOS/Android applications | 🔄 Phase 4 | 📋 Planned |
 | `docs/` | Technical documentation | 🔄 In Progress | N/A |
 
@@ -328,7 +329,7 @@ cd prover/guardian_zkml && cargo test
 cd contracts && forge test
 
 # SDK Tests (when available)  
-cd sdk && cargo test
+cd sdk && npm test
 ```
 
 ### Performance Benchmarking
@@ -379,11 +380,11 @@ We welcome contributions! Please see our development guides:
 - [x] Gasless transaction infrastructure
 - [x] Cross-chain compatibility
 
-### Phase 3: Developer Experience 📋
-- [ ] TypeScript/Rust SDK implementation
-- [ ] API documentation and examples
-- [ ] Integration testing framework
-- [ ] Developer tools and utilities
+### Phase 3: Developer Experience ✅
+- [x] TypeScript/Rust SDK implementation
+- [x] API documentation and examples
+- [x] Integration testing framework
+- [x] Developer tools and utilities
 
 ### Phase 4: User Applications 📱
 - [ ] Mobile wallet applications
@@ -442,6 +443,24 @@ const account = await factory.createAccount(owner, salt);
 const userOp = await buildUserOperation(account, callData);
 const entryPoint = new ethers.Contract(ENTRYPOINT_ADDRESS, entryPointABI, bundler);
 await entryPoint.handleOps([userOp], beneficiary);
+```
+
+### 📚 **TypeScript SDK Usage**
+```typescript
+// Guardian-AA SDK - Simple and powerful
+import { createSepoliaGuardianAA, GuardianAA } from '@guardian-aa/sdk';
+
+// Quick setup for Sepolia testnet
+const guardianAA = createSepoliaGuardianAA('YOUR_RPC_URL');
+await guardianAA.initialize(signer);
+
+// Deploy a new account
+const contractsClient = guardianAA.getContractsClient();
+const account = await contractsClient.deploySimpleAccount(ownerAddress);
+
+// Generate ZK proof for private data  
+const zkClient = guardianAA.getZkClient();
+const proof = await zkClient.generateProof(sensitiveData);
 ```
 
 ### 🤖 **AI Assistant Preview**
@@ -512,11 +531,11 @@ We welcome contributions from developers, researchers, and Web3 enthusiasts!
 
 <div align="center">
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
+[![License: Custom](https://img.shields.io/badge/License-Custom-orange.svg?style=for-the-badge)](LICENSE)
 
-**Guardian-AA is open-source software licensed under the [MIT License](LICENSE)**
+**Guardian-AA is open-source software licensed under the [Guardian-AA Custom License](LICENSE)**
 
-*Feel free to use, modify, and distribute according to the license terms*
+*Free for non-commercial use. Commercial use requires permission.*
 
 </div>
 
