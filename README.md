@@ -70,7 +70,7 @@ Guardian-AA combines zero-knowledge cryptography with intelligent automation to 
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/your-org/Guardian-AA-A-Zero-Knowledge-AI-Wallet-Copilot.git
+git clone hhttps://github.com/tuaregsand/Guardian-AA-A-Zero-Knowledge-AI-Wallet-Copilot.git
 cd Guardian-AA-A-Zero-Knowledge-AI-Wallet-Copilot
 ```
 
