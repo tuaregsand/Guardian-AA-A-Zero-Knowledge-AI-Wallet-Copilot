@@ -1,0 +1,204 @@
+name: 🧪 Continuous Integration
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  test-zk-proofs:
+    name: 🔐 ZK Proof System Tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./prover/guardian_zkml
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      
+    - name: 🦀 Setup Rust
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+        profile: minimal
+        override: true
+        components: rustfmt, clippy
+        
+    - name: 💾 Cache dependencies
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.cargo/registry
+          ~/.cargo/git
+          ./prover/guardian_zkml/target
+        key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+        
+    - name: 🔧 Check formatting
+      run: cargo fmt -- --check
+      
+    - name: 📝 Run clippy
+      run: cargo clippy -- -D warnings
+      
+    - name: 🧪 Run tests
+      run: cargo test --verbose
+      
+    - name: ⚡ Run benchmarks
+      run: cargo bench --bench sha256_benchmark
+
+  test-smart-contracts:
+    name: ⚡ Smart Contract Tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./contracts
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+        
+    - name: 🔧 Install Foundry
+      uses: foundry-rs/foundry-toolchain@v1
+      with:
+        version: nightly
+        
+    - name: 💾 Cache Foundry
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.foundry
+          ./contracts/cache
+          ./contracts/out
+        key: ${{ runner.os }}-foundry-${{ hashFiles('**/foundry.toml') }}
+        
+    - name: 📦 Install dependencies
+      run: forge install
+      
+    - name: 🔨 Build contracts
+      run: forge build
+      
+    - name: 🧪 Run tests
+      run: forge test -vvv
+      
+    - name: ⛽ Gas report
+      run: forge test --gas-report
+      
+    - name: 📊 Coverage report
+      run: forge coverage
+
+  lint-and-format:
+    name: 🎨 Code Quality
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      
+    - name: 🦀 Setup Rust
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+        profile: minimal
+        override: true
+        components: rustfmt, clippy
+        
+    - name: 🔧 Install Foundry
+      uses: foundry-rs/foundry-toolchain@v1
+      
+    - name: 📝 Check Rust formatting
+      run: |
+        cd prover/guardian_zkml
+        cargo fmt -- --check
+        
+    - name: 📝 Check Solidity formatting
+      run: |
+        cd contracts
+        forge fmt --check
+
+  security-audit:
+    name: 🔐 Security Audit
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      
+    - name: 🦀 Setup Rust
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+        profile: minimal
+        override: true
+        
+    - name: 🔍 Install cargo-audit
+      run: cargo install cargo-audit
+      
+    - name: 🛡️ Run security audit
+      run: |
+        cd prover/guardian_zkml
+        cargo audit
+        
+    - name: 🔧 Install Foundry
+      uses: foundry-rs/foundry-toolchain@v1
+      
+    - name: 🛡️ Run Slither (if contracts changed)
+      run: |
+        pip install slither-analyzer
+        cd contracts
+        slither .
+      continue-on-error: true
+
+  performance-benchmark:
+    name: 📈 Performance Benchmarks
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    defaults:
+      run:
+        working-directory: ./prover/guardian_zkml
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      
+    - name: 🦀 Setup Rust
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+        profile: minimal
+        override: true
+        
+    - name: 💾 Cache dependencies
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.cargo/registry
+          ~/.cargo/git
+          ./prover/guardian_zkml/target
+        key: ${{ runner.os }}-cargo-bench-${{ hashFiles('**/Cargo.lock') }}
+        
+    - name: ⚡ Run benchmarks
+      run: |
+        cargo bench --bench sha256_benchmark -- --output-format json | tee benchmark_results.json
+        
+    - name: 📊 Comment PR with results
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const fs = require('fs');
+          try {
+            const results = fs.readFileSync('./prover/guardian_zkml/benchmark_results.json', 'utf8');
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '## 📈 Benchmark Results\n\n```json\n' + results + '\n```'
+            });
+          } catch (error) {
+            console.log('No benchmark results found or error reading file');
+          } 
