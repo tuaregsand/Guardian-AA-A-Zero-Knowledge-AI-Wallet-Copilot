@@ -2,7 +2,7 @@
 
 > Zero-Knowledge AI Wallet Copilot SDK for TypeScript/JavaScript
 
-[![npm version](https://badge.fury.io/js/@guardian-aa/sdk.svg)](https://badge.fury.io/js/@guardian-aa/sdk)
+[![npm version](https://badge.fury.io/js/@tuaregsand/guardian-aa-sdk.svg)](https://badge.fury.io/js/@tuaregsand/guardian-aa-sdk)
 [![License: Custom](https://img.shields.io/badge/License-Custom-orange.svg)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.3-blue.svg)](https://www.typescriptlang.org/)
 [![Build Status](https://img.shields.io/badge/Build-Passing-brightgreen.svg)](#)
@@ -28,13 +28,13 @@ The Guardian-AA SDK provides a comprehensive TypeScript/JavaScript interface for
 
 ```bash
 # npm
-npm install @guardian-aa/sdk
+npm install @tuaregsand/guardian-aa-sdk
 
 # yarn
-yarn add @guardian-aa/sdk
+yarn add @tuaregsand/guardian-aa-sdk
 
 # pnpm
-pnpm add @guardian-aa/sdk
+pnpm add @tuaregsand/guardian-aa-sdk
 ```
 
 ### Peer Dependencies
@@ -48,7 +48,7 @@ npm install @noble/hashes @noble/curves
 ### Basic Setup
 
 ```typescript
-import { createSepoliaGuardianAA } from '@guardian-aa/sdk';
+import { createSepoliaGuardianAA } from '@tuaregsand/guardian-aa-sdk';
 import { ethers } from 'ethers';
 
 // Create SDK instance for Sepolia testnet
@@ -140,7 +140,7 @@ console.log('Gasless transaction executed:', txHash);
 The main SDK client that provides unified access to all Guardian-AA functionality.
 
 ```typescript
-import { GuardianAA, createGuardianAA } from '@guardian-aa/sdk';
+import { GuardianAA, createGuardianAA } from '@tuaregsand/guardian-aa-sdk';
 
 const config = {
   network: {
@@ -269,7 +269,7 @@ import {
   isValidSignature, 
   isValidUserOperation,
   validateAccountDeployment 
-} from '@guardian-aa/sdk';
+} from '@tuaregsand/guardian-aa-sdk';
 
 const isValid = isValidAddress('0x...');
 const isValidSig = isValidSignature('0x...');
@@ -284,7 +284,7 @@ import {
   formatEther, 
   formatGwei,
   truncateAddress 
-} from '@guardian-aa/sdk';
+} from '@tuaregsand/guardian-aa-sdk';
 
 const checksummed = formatAddress(address);
 const ethAmount = formatEther(weiAmount);
@@ -301,7 +301,7 @@ import {
   verifySignature,
   hashSHA256,
   getUserOpHash 
-} from '@guardian-aa/sdk';
+} from '@tuaregsand/guardian-aa-sdk';
 
 const privateKey = generatePrivateKey();
 const signature = await signMessage(message, privateKey);
@@ -370,7 +370,7 @@ import {
   ZkProofError, 
   ContractError, 
   ValidationError 
-} from '@guardian-aa/sdk';
+} from '@tuaregsand/guardian-aa-sdk';
 
 try {
   await zkClient.generateProof(data);

@@ -1,5 +1,5 @@
 {
-  "name": "@guardian-aa/sdk",
+  "name": "@tuaregsand/guardian-aa-sdk",
   "version": "0.1.0",
   "description": "Guardian-AA SDK - Zero-Knowledge AI Wallet Copilot SDK",
   "main": "./dist/index.js",

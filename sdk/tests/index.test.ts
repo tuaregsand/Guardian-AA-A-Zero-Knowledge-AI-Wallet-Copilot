@@ -83,6 +83,7 @@ describe('Guardian-AA SDK', () => {
             currency: 'ETH',
             isTestnet: true,
           },
+          debug: false,
         });
       }).toThrow('Network RPC URL is required');
     });
@@ -136,6 +137,7 @@ describe('Guardian-AA SDK', () => {
             currency: 'ETH',
             isTestnet: true,
           },
+          debug: false,
         });
       }).toThrow('Network RPC URL is required');
     });
