@@ -244,10 +244,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🆘 **Support**
 
-- 📧 **Email**: support@guardian-aa.com
-- 💬 **Discord**: [Guardian-AA Community](https://discord.gg/guardian-aa)
-- 📖 **Documentation**: [docs.guardian-aa.com](https://docs.guardian-aa.com)
-- 🐛 **Issues**: [GitHub Issues](https://github.com/your-org/Guardian-AA-A-Zero-Knowledge-AI-Wallet-Copilot/issues)
+-**Twitter**:(https://x.com/0xtuareg)
+- 🐛 **Issues**: [GitHub Issues](https://github.com/tuaregsand/Guardian-AA-A-Zero-Knowledge-AI-Wallet-Copilot/issues)
 
 ## 🙏 **Acknowledgments**
 
