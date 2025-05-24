@@ -503,8 +503,8 @@ We welcome contributions from developers, researchers, and Web3 enthusiasts!
 ### 📞 **Contact Options**
 - 🐛 **Bug Reports**: [GitHub Issues](https://github.com/tuaregsand/Guardian-AA-A-Zero-Knowledge-AI-Wallet-Copilot/issues)
 - 💡 **Feature Requests**: [GitHub Discussions](https://github.com/tuaregsand/Guardian-AA-A-Zero-Knowledge-AI-Wallet-Copilot/discussions)
-- 🔐 **Security Issues**: security@guardian-aa.com
-- 📧 **General Inquiries**: hello@guardian-aa.com
+- 🔐 **Security Issues**: (https://x.com/0xtuareg)
+- 📧 **General Inquiries**: (https://x.com/0xtuareg)
 
 ---
 

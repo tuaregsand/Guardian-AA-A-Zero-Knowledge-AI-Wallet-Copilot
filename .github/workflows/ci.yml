@@ -81,7 +81,7 @@ jobs:
         
     - name: 📦 Install dependencies
       run: |
-        forge install --no-commit
+        forge install 
         git submodule update --init --recursive
       
     - name: 🔨 Build contracts
