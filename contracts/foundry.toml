@@ -1,0 +1,36 @@
+[profile.default]
+src = "src"
+out = "out"
+libs = ["lib", "node_modules"]
+remappings = [
+    "@openzeppelin/=node_modules/@openzeppelin/",
+    "forge-std/=lib/forge-std/src/"
+]
+solc_version = "0.8.25"
+optimizer = true
+optimizer_runs = 200
+via_ir = true
+gas_limit = 30_000_000
+
+[fmt]
+line_length = 120
+tab_width = 4
+bracket_spacing = true
+quote_style = "double"
+
+[fuzz]
+runs = 256
+max_test_rejects = 65536
+seed = "0x1"
+dictionary_weight = 40
+include_storage = true
+include_push_bytes = true
+
+[profile.ci]
+verbosity = 4
+
+[rpc_endpoints]
+localhost = "http://127.0.0.1:8545"
+mainnet = "${MAINNET_RPC_URL}"
+
+# See more config options https://github.com/foundry-rs/foundry/blob/master/crates/config/README.md#all-options
