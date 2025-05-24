@@ -14,11 +14,21 @@ pnpm-lock.yaml
 /target/
 Cargo.lock
 /prover/target/
-# Solidity
-/cache/
-/artifacts/
-/out/
-/coverage/
+# Solidity / Foundry
+contracts/cache/
+contracts/artifacts/
+contracts/out/
+contracts/coverage/
+contracts/lib/
+*.cache
+broadcast/
+deployments/
+script/broadcast/
+
+# Hardhat
+artifacts/
+cache/
+typechain-types/
 
 # Mobile (Android / iOS)
 /android/app/build/
