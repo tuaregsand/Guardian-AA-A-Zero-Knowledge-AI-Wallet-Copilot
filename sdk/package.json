@@ -1,7 +1,7 @@
 {
   "name": "@tuaregsand/guardian-aa-sdk",
   "version": "0.1.0",
-  "description": "Guardian-AA SDK - Zero-Knowledge AI Wallet Copilot SDK",
+  "description": "Guardian-AA SDK - Zero-Knowledge AI Wallet Copilot SDK for TypeScript/JavaScript. ⭐ Star our repo: https://github.com/tuaregsand/Guardian-AA-A-Zero-Knowledge-AI-Wallet-Copilot",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -46,6 +46,7 @@
     "typecheck": "tsc --noEmit",
     "clean": "rimraf dist",
     "prepublishOnly": "npm run clean && npm run build && npm run test && npm run typecheck",
+    "postinstall": "node -e \"console.log('\\n🛡️ Guardian-AA SDK installed successfully!\\n\\n⭐ Please star our repo: https://github.com/tuaregsand/Guardian-AA-A-Zero-Knowledge-AI-Wallet-Copilot\\n👤 Follow @tuaregsand: https://github.com/tuaregsand\\n🐦 Follow on Twitter: https://x.com/0xtuareg\\n\\nThank you for using Guardian-AA! 🙏\\n')\"",
     "docs": "typedoc --out docs src/index.ts",
     "format": "prettier --write .",
     "size": "size-limit",

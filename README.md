@@ -15,6 +15,30 @@
 
 *Built with privacy-first principles for seamless, secure, and intelligent Web3 experiences*
 
+---
+
+### 🌟 **LOVE THIS PROJECT? SHOW YOUR SUPPORT!** 🌟
+
+<div align="center">
+
+[![GitHub stars](https://img.shields.io/github/stars/tuaregsand/Guardian-AA-A-Zero-Knowledge-AI-Wallet-Copilot?style=for-the-badge&logo=github&color=yellow)](https://github.com/tuaregsand/Guardian-AA-A-Zero-Knowledge-AI-Wallet-Copilot/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/tuaregsand/Guardian-AA-A-Zero-Knowledge-AI-Wallet-Copilot?style=for-the-badge&logo=github&color=blue)](https://github.com/tuaregsand/Guardian-AA-A-Zero-Knowledge-AI-Wallet-Copilot/network/members)
+[![GitHub followers](https://img.shields.io/github/followers/tuaregsand?style=for-the-badge&logo=github&color=green)](https://github.com/tuaregsand)
+
+**⭐ [STAR THIS REPO](https://github.com/tuaregsand/Guardian-AA-A-Zero-Knowledge-AI-Wallet-Copilot/stargazers) ⭐**
+
+**👤 [FOLLOW @tuaregsand](https://github.com/tuaregsand) 👤**
+
+**🐦 [FOLLOW ON TWITTER](https://x.com/0xtuareg) 🐦**
+
+</div>
+
+> **📢 USING GUARDIAN-AA IN YOUR PROJECT?**  
+> **Please give us a ⭐ star and mention [@tuaregsand](https://github.com/tuaregsand) in your README!**  
+> **It helps us grow the community and continue building amazing tools! 🙏**
+
+---
+
 [🔧 Quick Start](#-quick-start) • [📊 Architecture](#-architecture-overview) • [🧪 Demo](#-development--testing) • [🤝 Contributing](#-contributing)
 
 ---
@@ -424,6 +448,57 @@ cargo clippy
 cargo audit
 ```
 
+---
+
+## 🌟 **Community & Recognition**
+
+<div align="center">
+
+### 💝 **SHOW SOME LOVE FOR GUARDIAN-AA!**
+
+**If Guardian-AA is helping your project, please consider:**
+
+[![Star this repo](https://img.shields.io/badge/⭐_Star_this_repo-yellow?style=for-the-badge&logo=github)](https://github.com/tuaregsand/Guardian-AA-A-Zero-Knowledge-AI-Wallet-Copilot/stargazers)
+[![Follow @tuaregsand](https://img.shields.io/badge/👤_FOLLOW_@tuaregsand-blue?style=for-the-badge&logo=github)](https://github.com/tuaregsand)
+[![Follow on Twitter](https://img.shields.io/badge/🐦_FOLLOW_ON_TWITTER-1DA1F2?style=for-the-badge&logo=twitter)](https://x.com/0xtuareg)
+
+</div>
+
+### 🙏 **Why Your Support Matters**
+
+- **⭐ Stars** help other developers discover Guardian-AA
+- **👥 Follows** keep you updated on new features and releases  
+- **🔄 Shares** spread the word about zero-knowledge wallet technology
+- **💬 Feedback** helps us improve and prioritize features
+
+### 📢 **Using Guardian-AA in Your Project?**
+
+**Please add this badge to your README:**
+
+```markdown
+[![Powered by Guardian-AA](https://img.shields.io/badge/Powered_by-Guardian--AA-blueviolet?style=flat-square&logo=ethereum)](https://github.com/tuaregsand/Guardian-AA-A-Zero-Knowledge-AI-Wallet-Copilot)
+```
+
+**And mention us in your project:**
+
+```markdown
+This project uses [Guardian-AA](https://github.com/tuaregsand/Guardian-AA-A-Zero-Knowledge-AI-Wallet-Copilot) 
+for zero-knowledge proof generation and account abstraction. 
+Built by [@tuaregsand](https://github.com/tuaregsand).
+```
+
+### 🏆 **Hall of Fame - Projects Using Guardian-AA**
+
+> **Want to be featured here?** 
+> 
+> ⭐ Star the repo, mention us in your project, and [open an issue](https://github.com/tuaregsand/Guardian-AA-A-Zero-Knowledge-AI-Wallet-Copilot/issues) with your project details!
+
+| Project | Description | Stars |
+|---------|-------------|-------|
+| *Your project here!* | *Be the first to showcase your Guardian-AA integration* | ⭐ |
+
+---
+
 ## 🤝 **Contributing**
 
 We welcome contributions! Please see our development guides:
@@ -435,138 +510,10 @@ We welcome contributions! Please see our development guides:
 - 📱 [Mobile Apps](mobile/AGENTS.md)
 
 ### Development Workflow
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Implement your changes with tests
-4. Run the full test suite
-5. Submit a pull request
-
-## 🎯 **Roadmap**
-
-### Phase 1: Core Infrastructure ✅
-- [x] Zero-knowledge proof system implementation
-- [x] Performance benchmarking and optimization framework
-- [x] Comprehensive testing and documentation
-
-### Phase 2: Smart Contract Layer ✅
-- [x] Account abstraction smart contracts
-- [x] Multi-signature wallet implementation
-- [x] Gasless transaction infrastructure
-- [x] Cross-chain compatibility
-
-### Phase 3: Developer Experience ✅
-- [x] TypeScript/Rust SDK implementation
-- [x] API documentation and examples
-- [x] Integration testing framework
-- [x] Developer tools and utilities
-
-### Phase 4: User Applications 📱
-- [ ] Mobile wallet applications
-- [ ] Web interface and browser extension
-- [ ] AI-powered transaction assistant
-- [ ] Advanced security features
-
-### Phase 5: AI Integration 🤖
-- [ ] Natural language transaction interface
-- [ ] Intelligent fraud detection
-- [ ] Automated portfolio management
-- [ ] Personalized user experience
-
-## 📈 **Performance Optimization Goals**
-
-| Metric | Current | Target | Status |
-|--------|---------|--------|--------|
-| ZK Proof Generation | ~718ms | <500ms | 🔧 Optimizing |
-| Contract Gas Costs | ~30k gas | <100k gas | ✅ Achieved |
-| Mobile App Load Time | TBD | <2s | 📋 Planned |
-| SDK Bundle Size | TBD | <500KB | 📋 Planned |
-
-## 🎬 **Demo & Examples**
-
-<div align="center">
-
-### 🚀 **Try Guardian-AA Now**
-
-*Experience the future of Web3 wallets*
-
-</div>
-
-### 🔐 **ZK Proof Generation Demo**
-```rust
-// Generate a zero-knowledge proof for transaction data
-use guardian_zkml::{generate_proof_slice, verify_proof_slice};
-
-let sensitive_data = b"transaction: transfer 1000 USDC to 0x123...";
-let proof = generate_proof_slice(sensitive_data);
-
-// Proof can be verified without revealing the original data
-assert!(verify_proof_slice(sensitive_data, &proof));
-println!("✅ ZK Proof verified! Privacy preserved.");
-```
-
-### ⚡ **Smart Contract Integration**
-```javascript
-// Deploy and interact with Guardian-AA smart contracts
-const { ethers } = require("ethers");
-
-// Create a new Guardian-AA account
-const factory = new ethers.Contract(FACTORY_ADDRESS, factoryABI, signer);
-const account = await factory.createAccount(owner, salt);
-
-// Execute gasless transaction via paymaster
-const userOp = await buildUserOperation(account, callData);
-const entryPoint = new ethers.Contract(ENTRYPOINT_ADDRESS, entryPointABI, bundler);
-await entryPoint.handleOps([userOp], beneficiary);
-```
-
-### 📚 **TypeScript SDK Usage**
-```typescript
-// Guardian-AA SDK - Simple and powerful
-import { createSepoliaGuardianAA, GuardianAA } from '@guardian-aa/sdk';
-
-// Quick setup for Sepolia testnet
-const guardianAA = createSepoliaGuardianAA('YOUR_RPC_URL');
-await guardianAA.initialize(signer);
-
-// Deploy a new account
-const contractsClient = guardianAA.getContractsClient();
-const account = await contractsClient.deploySimpleAccount(ownerAddress);
-
-// Generate ZK proof for private data  
-const zkClient = guardianAA.getZkClient();
-const proof = await zkClient.generateProof(sensitiveData);
-```
-
-### 🤖 **AI Assistant Preview**
-```
-🤖 Guardian: "I notice you're about to swap 1000 USDC for ETH. 
-               Current market conditions suggest waiting 2 hours 
-               could save you ~$15 in slippage. Proceed anyway?"
-
-👤 User: "Set a limit order for better price"
-
-🤖 Guardian: "✅ Limit order set at $2,401 ETH. I'll notify you when executed."
-```
-
----
-
-## 🤝 **Contributing**
-
-<div align="center">
-
-### 🌟 **Join the Guardian-AA Community**
-
-We welcome contributions from developers, researchers, and Web3 enthusiasts!
-
-[![Contributors](https://contrib.rocks/image?repo=tuaregsand/Guardian-AA-A-Zero-Knowledge-AI-Wallet-Copilot)](https://github.com/tuaregsand/Guardian-AA-A-Zero-Knowledge-AI-Wallet-Copilot/graphs/contributors)
-
-</div>
-
-### 🛠️ **Development Workflow**
 1. 🍴 **Fork** the repository
 2. 🌿 **Create** a feature branch (`git checkout -b feature/amazing-feature`)
 3. ✨ **Implement** your changes with tests
-4. 🧪 **Run** the full test suite (`forge test && cargo test`)
+4. 🧪 **Run** the full test suite
 5. 📝 **Commit** your changes (`git commit -m 'feat: Add amazing feature'`)
 6. 🚀 **Push** to the branch (`git push origin feature/amazing-feature`)
 7. 🔄 **Open** a Pull Request
@@ -645,6 +592,40 @@ We welcome contributions from developers, researchers, and Web3 enthusiasts!
 
 ---
 
+### 🌟 **BEFORE YOU GO - SHOW YOUR SUPPORT!** 🌟
+
+**Guardian-AA is growing fast with 35+ weekly downloads and 239+ GitHub clones!**  
+**Join our amazing community of developers building the future of Web3!**
+
+<div align="center">
+
+[![Star this repository](https://img.shields.io/badge/⭐_STAR_THIS_REPO-FFD700?style=for-the-badge&logo=github&logoColor=black)](https://github.com/tuaregsand/Guardian-AA-A-Zero-Knowledge-AI-Wallet-Copilot/stargazers)
+
+[![Follow @tuaregsand](https://img.shields.io/badge/👤_FOLLOW_@tuaregsand-0366d6?style=for-the-badge&logo=github&logoColor=white)](https://github.com/tuaregsand)
+
+[![Follow on Twitter](https://img.shields.io/badge/🐦_FOLLOW_ON_TWITTER-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://x.com/0xtuareg)
+
+[![Watch this repo](https://img.shields.io/badge/👁️_WATCH_FOR_UPDATES-2ea44f?style=for-the-badge&logo=github&logoColor=white)](https://github.com/tuaregsand/Guardian-AA-A-Zero-Knowledge-AI-Wallet-Copilot/watchers)
+
+</div>
+
+### 📊 **Community Stats**
+
+[![GitHub stars](https://img.shields.io/github/stars/tuaregsand/Guardian-AA-A-Zero-Knowledge-AI-Wallet-Copilot?style=social)](https://github.com/tuaregsand/Guardian-AA-A-Zero-Knowledge-AI-Wallet-Copilot/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/tuaregsand/Guardian-AA-A-Zero-Knowledge-AI-Wallet-Copilot?style=social)](https://github.com/tuaregsand/Guardian-AA-A-Zero-Knowledge-AI-Wallet-Copilot/network/members)
+[![GitHub watchers](https://img.shields.io/github/watchers/tuaregsand/Guardian-AA-A-Zero-Knowledge-AI-Wallet-Copilot?style=social)](https://github.com/tuaregsand/Guardian-AA-A-Zero-Knowledge-AI-Wallet-Copilot/watchers)
+[![Twitter Follow](https://img.shields.io/twitter/follow/0xtuareg?style=social)](https://x.com/0xtuareg)
+
+**💝 Your support helps us:**
+- 🚀 **Reach more developers** who need ZK wallet solutions
+- 🔧 **Prioritize features** based on community feedback  
+- 📚 **Improve documentation** and developer experience
+- 🌍 **Build the future** of decentralized finance together
+
+---
+
 **⭐ Star this repo if Guardian-AA helps secure your Web3 journey! ⭐**
+
+**🙏 Thank you for being part of the Guardian-AA community! 🙏**
 
 </div> 

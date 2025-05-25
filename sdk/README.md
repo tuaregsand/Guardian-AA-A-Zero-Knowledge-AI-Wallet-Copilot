@@ -9,6 +9,25 @@
 [![Tests](https://img.shields.io/badge/Tests-22%2F22%20Passing-brightgreen.svg)](#)
 [![Coverage](https://img.shields.io/badge/Coverage-100%25-brightgreen.svg)](#)
 
+---
+
+## 🌟 **LOVE THIS SDK? SHOW YOUR SUPPORT!** 🌟
+
+<div align="center">
+
+[![Star the main repo](https://img.shields.io/badge/⭐_STAR_THE_REPO-FFD700?style=for-the-badge&logo=github&logoColor=black)](https://github.com/tuaregsand/Guardian-AA-A-Zero-Knowledge-AI-Wallet-Copilot/stargazers)
+
+[![Follow @tuaregsand](https://img.shields.io/badge/👤_FOLLOW_@tuaregsand-0366d6?style=for-the-badge&logo=github&logoColor=white)](https://github.com/tuaregsand)
+
+[![Follow on Twitter](https://img.shields.io/badge/🐦_FOLLOW_ON_TWITTER-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://x.com/0xtuareg)
+
+**📢 Using Guardian-AA SDK in your project?**  
+**Please ⭐ star our repo and mention [@tuaregsand](https://github.com/tuaregsand) in your README!**
+
+</div>
+
+---
+
 The Guardian-AA SDK provides a comprehensive TypeScript/JavaScript interface for building applications with Guardian-AA's zero-knowledge proof system, ERC-4337 account abstraction, and gasless transaction capabilities.
 
 **🎉 Status: Production Ready (Phase 3 Complete)**
@@ -444,4 +463,47 @@ Please read our [Contributing Guide](../CONTRIBUTING.md) for details on our code
 
 ---
 
-**Built with ❤️ by the Guardian-AA team** 
+## 🌟 **Community & Attribution**
+
+### 💝 **Show Your Support**
+
+If Guardian-AA SDK is helping your project, please consider:
+
+<div align="center">
+
+[![Star this repository](https://img.shields.io/badge/⭐_STAR_THE_REPO-FFD700?style=for-the-badge&logo=github&logoColor=black)](https://github.com/tuaregsand/Guardian-AA-A-Zero-Knowledge-AI-Wallet-Copilot/stargazers)
+
+[![Follow @tuaregsand](https://img.shields.io/badge/👤_FOLLOW_@tuaregsand-0366d6?style=for-the-badge&logo=github&logoColor=white)](https://github.com/tuaregsand)
+
+[![Follow on Twitter](https://img.shields.io/badge/🐦_FOLLOW_ON_TWITTER-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://x.com/0xtuareg)
+
+</div>
+
+### 📢 **Using Guardian-AA SDK?**
+
+**Add this badge to your project's README:**
+
+```markdown
+[![Powered by Guardian-AA](https://img.shields.io/badge/Powered_by-Guardian--AA-blueviolet?style=flat-square&logo=ethereum)](https://github.com/tuaregsand/Guardian-AA-A-Zero-Knowledge-AI-Wallet-Copilot)
+```
+
+**And mention us:**
+
+```markdown
+This project uses [Guardian-AA SDK](https://www.npmjs.com/package/@tuaregsand/guardian-aa-sdk) 
+for zero-knowledge proofs and account abstraction. 
+Built by [@tuaregsand](https://github.com/tuaregsand).
+```
+
+### 🙏 **Why Your Support Matters**
+
+- **⭐ Stars** help other developers discover Guardian-AA
+- **👥 Follows** keep you updated on new features and releases  
+- **🔄 Shares** spread the word about zero-knowledge wallet technology
+- **💬 Feedback** helps us improve and prioritize features
+
+---
+
+**Built with ❤️ by the Guardian-AA team**
+
+**⭐ Star our repo if Guardian-AA SDK helps secure your Web3 journey! ⭐** 

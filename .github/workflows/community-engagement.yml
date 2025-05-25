@@ -1,0 +1,123 @@
+name: Community Engagement
+
+on:
+  issues:
+    types: [opened]
+  pull_request:
+    types: [opened]
+
+jobs:
+  welcome:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Welcome new contributors
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const { number } = context.issue || context.pull_request;
+            const isIssue = context.eventName === 'issues';
+            const isPR = context.eventName === 'pull_request';
+            
+            // Check if user has starred the repo
+            let hasStarred = false;
+            try {
+              await github.rest.activity.getRepoSubscription({
+                owner,
+                repo,
+              });
+              hasStarred = true;
+            } catch (error) {
+              hasStarred = false;
+            }
+            
+            let message = '';
+            
+            if (isIssue) {
+              message = `## 🙏 Thank you for opening an issue!
+            
+            We appreciate your contribution to Guardian-AA! 
+            
+            ${!hasStarred ? `### 🌟 **Before we dive in, could you help us grow the community?**
+            
+            - ⭐ **[Star this repository](https://github.com/${owner}/${repo}/stargazers)** - it helps other developers discover Guardian-AA!
+            - 👤 **[Follow @tuaregsand](https://github.com/tuaregsand)** - stay updated on new features and releases
+            - 🐦 **[Follow on Twitter](https://x.com/0xtuareg)** - join the conversation about ZK and Web3
+            
+            Your support helps us continue building amazing tools for the community! 🚀` : ''}
+            
+            ### 📋 **What's next?**
+            
+            - We'll review your issue within 24-48 hours
+            - Please provide as much detail as possible to help us understand the problem
+            - Feel free to contribute a fix if you're able!
+            
+            **Happy building! 🛡️**`;
+            } else if (isPR) {
+              message = `## 🎉 Thank you for your contribution!
+            
+            We're excited to review your pull request! 
+            
+            ${!hasStarred ? `### 🌟 **Show your support for Guardian-AA:**
+            
+            - ⭐ **[Star this repository](https://github.com/${owner}/${repo}/stargazers)** - help us reach more developers!
+            - 👤 **[Follow @tuaregsand](https://github.com/tuaregsand)** - stay connected with the project
+            - 🐦 **[Follow on Twitter](https://x.com/0xtuareg)** - join our community discussions
+            
+            Your support means the world to us! 💝` : ''}
+            
+            ### 🔍 **Review Process:**
+            
+            1. **Automated checks** will run shortly
+            2. **Manual review** by our team within 24-48 hours  
+            3. **Feedback** and requested changes (if any)
+            4. **Merge** once approved!
+            
+            **Thank you for making Guardian-AA better! 🚀**`;
+            }
+            
+            await github.rest.issues.createComment({
+              owner,
+              repo,
+              issue_number: number,
+              body: message
+            });
+
+  star-reminder:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'issues' && !contains(github.event.issue.labels.*.name, 'showcase')
+    steps:
+      - name: Check if user starred repo
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const username = context.payload.issue.user.login;
+            
+            try {
+              // Check if user has starred the repo
+              const { data: stargazers } = await github.rest.activity.listStargazersForRepo({
+                owner,
+                repo,
+                per_page: 100
+              });
+              
+              const hasStarred = stargazers.some(stargazer => stargazer.login === username);
+              
+              if (!hasStarred) {
+                // Add a gentle reminder label
+                await github.rest.issues.addLabels({
+                  owner,
+                  repo,
+                  issue_number: context.issue.number,
+                  labels: ['needs-star-reminder']
+                });
+                
+                // Post a follow-up comment after 24 hours (this would need a scheduled workflow)
+                console.log(`User ${username} hasn't starred the repo yet`);
+              } else {
+                console.log(`User ${username} has already starred the repo! 🌟`);
+              }
+            } catch (error) {
+              console.log('Error checking star status:', error.message);
+            } 

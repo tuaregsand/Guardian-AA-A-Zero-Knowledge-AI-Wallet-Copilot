@@ -1,0 +1,123 @@
+name: 🌟 Project Showcase
+description: Share your project that uses Guardian-AA and get featured in our Hall of Fame!
+title: "[SHOWCASE] "
+labels: ["showcase", "community", "documentation"]
+assignees:
+  - tuaregsand
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 🌟 Thank you for using Guardian-AA!
+        
+        We love seeing what the community builds with Guardian-AA! Share your project below and we'll feature it in our README's Hall of Fame.
+        
+        **Before submitting:**
+        - ⭐ Please star our repo: https://github.com/tuaregsand/Guardian-AA-A-Zero-Knowledge-AI-Wallet-Copilot
+        - 👤 Follow @tuaregsand: https://github.com/tuaregsand
+        - 🐦 Follow on Twitter: https://x.com/0xtuareg
+        
+  - type: input
+    id: project-name
+    attributes:
+      label: 🚀 Project Name
+      description: What's the name of your project?
+      placeholder: "e.g., MyDeFi Wallet, ZK Trading Bot"
+    validations:
+      required: true
+
+  - type: input
+    id: project-url
+    attributes:
+      label: 🔗 Project URL
+      description: Link to your project (GitHub, website, demo, etc.)
+      placeholder: "https://github.com/yourname/your-project"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: 📝 Project Description
+      description: Tell us about your project! What does it do? How does it use Guardian-AA?
+      placeholder: "A brief description of your project and how it leverages Guardian-AA's features..."
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: guardian-features
+    attributes:
+      label: 🛡️ Guardian-AA Features Used
+      description: Which Guardian-AA features does your project use?
+      options:
+        - label: Zero-Knowledge Proofs (ZK)
+        - label: Account Abstraction (ERC-4337)
+        - label: Gasless Transactions
+        - label: Multi-Signature Wallets
+        - label: TypeScript/JavaScript SDK
+        - label: Smart Contracts
+        - label: Backend API
+
+  - type: dropdown
+    id: project-stage
+    attributes:
+      label: 🚧 Project Stage
+      description: What stage is your project in?
+      options:
+        - Concept/Planning
+        - Development
+        - Beta/Testing
+        - Production/Live
+        - Open Source
+    validations:
+      required: true
+
+  - type: input
+    id: github-stars
+    attributes:
+      label: ⭐ GitHub Stars (if applicable)
+      description: How many stars does your project have?
+      placeholder: "e.g., 42"
+
+  - type: textarea
+    id: attribution
+    attributes:
+      label: 🙏 Attribution
+      description: How are you crediting Guardian-AA in your project? (README mention, badge, etc.)
+      placeholder: "e.g., Added Guardian-AA badge to README, mentioned in documentation..."
+
+  - type: checkboxes
+    id: support-checklist
+    attributes:
+      label: 💝 Community Support Checklist
+      description: Help us grow the Guardian-AA community!
+      options:
+        - label: ⭐ I have starred the Guardian-AA repository
+          required: true
+        - label: 👤 I am following @tuaregsand on GitHub
+          required: true
+        - label: 🔗 I have added attribution to Guardian-AA in my project
+          required: true
+        - label: 🐦 I am following @0xtuareg on Twitter (optional)
+        - label: 📢 I am willing to share my project on social media
+
+  - type: textarea
+    id: additional-info
+    attributes:
+      label: 📋 Additional Information
+      description: Anything else you'd like to share about your project or experience with Guardian-AA?
+      placeholder: "Screenshots, testimonials, feedback, suggestions..."
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        
+        ## 🎉 What happens next?
+        
+        1. **Review**: We'll review your submission within 48 hours
+        2. **Feature**: Approved projects get added to our Hall of Fame in the README
+        3. **Promote**: We'll share your project on our social media channels
+        4. **Connect**: Join our community of Guardian-AA builders!
+        
+        **Thank you for being part of the Guardian-AA community! 🙏** 
