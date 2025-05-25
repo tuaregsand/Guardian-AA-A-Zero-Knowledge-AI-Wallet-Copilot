@@ -1,0 +1,136 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+1. API design & framework choice
+Framework
+
+Actix-Web or Axum are battle-tested: both give you zero-cost abstractions, async/.await, middleware, and HTTP/2 support.
+
+API style
+
+REST with versioned routes (e.g. /v1/proof, /v1/tx-suggest) is simple to iterate on.
+
+For real-time features (e.g. live gas-price notifications or AI suggestions), consider WebSockets (Actix-Web’s ws module) or Server-Sent Events.
+
+OpenAPI
+
+Use crates like utoipa or paperclip to generate Swagger docs—gives your mobile and web teams a clear contract.
+
+2. ZK proof & AI integration
+Offload heavy work
+
+Spawn proof-generation as a Tokio task or a dedicated microservice so it can run in parallel without blocking your HTTP threads.
+
+Shared types
+
+Define request/response structs (e.g. ProofRequest, SuggestionRequest) in a common crate—both your backend and your Rust SDK can consume them.
+
+Error handling
+
+Use thiserror/anyhow for internal errors, map them to clean HTTP error codes with actix_web::error::ResponseError.
+
+3. Data storage & state
+Database choice
+
+PostgreSQL + SQLx or SeaORM for structured data (user profiles, preferences, AI history).
+
+Redis for ephemeral state and pub/sub (real-time notifications, rate-limiting).
+
+Migrations
+
+Use sqlx-cli or refinery to manage schema versions—so your CI can catch drift early.
+
+4. Security & authentication
+Session & tokens
+
+Wallet-based login: have the client sign a challenge (EIP-191) and exchange it for a JWT via your Rust backend.
+
+Protect AI endpoints and meta-transaction routes with middleware that verifies JWTs and scopes.
+
+TLS & hardening
+
+Build with rustls for HTTPS.
+
+Enable Helmet-style headers (CSP, HSTS) via tower_http::cors and tower_http::set_header.
+
+Secret management
+
+Don’t bake keys into your binary—load them from environment variables or a vault (HashiCorp, AWS Secrets Manager).
+
+5. Observability & testing
+Logging
+
+Use tracing for structured, context-rich logs; ship them to a central collector (e.g. Grafana Loki).
+
+Metrics
+
+Instrument with prometheus and expose /metrics for QPS, latency, proof-gen times.
+
+CI/CD
+In your GitHub Actions workflows: run cargo fmt, cargo clippy, cargo test, cargo audit, and build a release binary in a multi-stage Dockerfile.
+
+Load testing
+
+Before mobile and web launch, run a tool like k6 or Gatling against your proof and suggestion endpoints to ensure they stay under target latencies.
+
+6. Scalability & deployment
+Containerization
+
+Multi-stage Docker builds to produce a small, statically-linked binary.
+
+Orchestration
+
+Kubernetes (or ECS) with Horizontal Pod Autoscaling based on CPU/response-time metrics.
+
+Feature flags
+
+Roll out your “AI assistant” and “advanced security” features gradually using a flag system (e.g. LaunchDarkly, Unleash).
+
+Quick example: an Axum router for mobile + AI
+rust
+Copy
+Edit
+use axum::{
+    extract::{Json, TypedHeader},
+    routing::{post, get},
+    Router, http::StatusCode
+};
+use serde::{Deserialize, Serialize};
+use tracing::info;
+
+#[derive(Deserialize)]
+struct ProofReq { payload: Vec<u8> }
+#[derive(Serialize)]
+struct ProofRes { proof: Vec<u8> }
+
+async fn generate_proof(Json(req): Json<ProofReq>) -> Result<Json<ProofRes>, StatusCode> {
+    // spawn in background so we don't block
+    let proof = tokio::task::spawn_blocking(move || zk_prover::generate(&req.payload))
+        .await.map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?
+        .map_err(|_| StatusCode::BAD_REQUEST)?;
+    Ok(Json(ProofRes { proof }))
+}
+
+async fn suggest_tx(Json(body): Json<SuggestionRequest>) -> Json<SuggestionResponse> {
+    info!("Received suggestion request: {:?}", body);
+    let suggestion = ai_assistant::analyze(&body);
+    Json(suggestion)
+}
+
+#[tokio::main]
+async fn main() {
+    tracing_subscriber::fmt::init();
+
+    let app = Router::new()
+        .route("/v1/proof", post(generate_proof))
+        .route("/v1/suggest", post(suggest_tx))
+        .layer(tower_http::cors::CorsLayer::permissive());
+
+    axum::Server::bind(&"0.0.0.0:4000".parse().unwrap())
+        .serve(app.into_make_service())
+        .await
+        .unwrap();
+}
+Bottom line: Phase 4 backend PR part is all about connecting your Rust core (ZK + contracts + AI) to real users on mobile, web, and extension clients. Embrace Rust’s strengths—safety, performance, and a unified codebase—while leaning on mature crates for API, DB, security, and observability.

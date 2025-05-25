@@ -1,0 +1,71 @@
+# Rust
+/target
+**/*.rs.bk
+*.pdb
+
+# Environment files
+.env
+.env.local
+.env.production
+.env.development
+.env.test
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Test coverage
+tarpaulin-report.html
+cobertura.xml
+coverage/
+
+# Temporary files
+tmp/
+temp/
+
+# Build artifacts
+dist/
+build/
+
+# Backup files
+*.bak
+*.backup
+
+# SQLx offline data (keep .sqlx-data.json if using offline mode)
+.sqlx/
+
+# Docker
+.dockerignore
+
+# Secrets and keys
+*.pem
+*.key
+*.crt
+secrets/
+
+# Local development
+.local/
+local/
+
+# Performance profiling
+*.prof
+flamegraph.svg
+
+# Cargo audit cache
+.cargo-audit.cache 

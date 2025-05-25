@@ -1,0 +1,109 @@
+[package]
+name        = "guardian-aa-backend"
+version     = "0.1.0"
+edition     = "2021"
+authors     = ["Artificialesque"]
+description = "Backend service for Guardian-AA Zero-Knowledge AI Wallet"
+license     = "SEE LICENSE IN LICENSE"
+# Tell Cargo to use the new feature resolver
+resolver     = "2"
+
+########################################################
+# ------------ Runtime & Web Framework --------------- #
+########################################################
+[dependencies]
+axum          = { version = "0.8.4", features = ["json", "ws", "multipart"] }
+tower         = { version = "0.4.13", features = ["full"] }
+tower-http    = { version = "0.6.2", features = [
+  "cors", "trace", "auth", "limit",
+  "compression-br", "compression-gzip", "compression-deflate"
+]}
+
+tokio         = { version = "1.43", features = ["full"] }
+serde         = { version = "1.0.197", features = ["derive"] }
+serde_json    = "1.0.117"
+
+########################################################
+# ----------------- Data & Storage ------------------- #
+########################################################
+sqlx = { version = "0.8", default-features = false, features = [
+  "runtime-tokio-rustls",
+  "postgres",
+  "macros",
+  "migrate",
+  "uuid",
+  "chrono",
+  "json",
+  "ipnetwork",
+]}
+
+redis = { version = "0.25", features = ["tokio-comp", "connection-manager"] }
+
+########################################################
+# ------------ Auth -- Security -- Crypto ------------ #
+########################################################
+jsonwebtoken = "9.3"
+argon2       = "0.5.2"
+uuid         = { version = "1.7", features = ["serde", "v4"] }
+
+########################################################
+# ------------- Logging & Observability -------------- #
+########################################################
+tracing            = "0.1.40"
+tracing-subscriber = { version = "0.3.18", features = ["env-filter", "json"] }
+
+########################################################
+# ------------- Config & Misc Utilities -------------- #
+########################################################
+config   = "0.13"
+dotenvy  = "0.15"
+chrono   = { version = "0.4.37", features = ["serde"] }
+base64   = "0.22"
+hex      = "0.4"
+reqwest  = { version = "0.12", features = ["json", "rustls-tls"] }
+thiserror = "1.0"
+anyhow    = "1.0"
+sha2      = "0.10"
+bincode   = "1.3"
+regex     = "1.10"
+rand      = "0.8"
+
+########################################################
+# ------------ Zero-Knowledge Proof stack ------------ #
+########################################################
+halo2_proofs  = { version = "0.3.0", features = ["dev-graph"] }
+halo2_gadgets = "0.3.0"
+ff            = "0.13.0"
+group         = "0.13.0"
+pasta_curves  = "0.5.0"
+guardian_zkml = { path = "../prover/guardian_zkml" }
+
+########################################################
+# ---------------- Solana-side Support --------------- #
+########################################################
+# Solana v2 crates all depend on curve25519-dalek 4.x → zeroize 1.5+
+solana-sdk      = "2.1"
+solana-client   = "2.1"
+solana-program  = "2.1"
+solana-account-decoder = "2.1"
+anchor-client   = { version = "0.31", features = ["async"] }
+spl-token       = { version = "6.0",  default-features = false, features = ["no-entrypoint"] }
+
+########################################################
+# -------------------- Dev-only ---------------------- #
+########################################################
+[dev-dependencies]
+criterion  = "0.5"
+proptest   = "1.4"
+tokio-test = "0.4"
+tower-service = "0.3"
+
+[profile.release]
+opt-level     = 3
+lto           = true
+codegen-units = 1
+panic         = "abort"
+
+[profile.dev]
+opt-level = 0
+debug     = true

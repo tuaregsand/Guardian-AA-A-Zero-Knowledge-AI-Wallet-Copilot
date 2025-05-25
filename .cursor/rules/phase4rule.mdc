@@ -1,0 +1,6 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+Phase 4: User Applications • Mobile wallet applications • Web interface and browser extension • AI-powered transaction assistant • Advanced security features   but before focusing on the frontend, i want to focus on the backend for all the supports (mobile, web, chrome extensions, and upcoming other ones...)  So I was thinking that we will divide ithe phase 4 n 2 part this PR, the first part will be building and testing the backend.   Then we push to main,   Second part of the PR will be to build the frontend design, connect it to the backend and any other relevants part of the codebase and test it, then push to github. 
