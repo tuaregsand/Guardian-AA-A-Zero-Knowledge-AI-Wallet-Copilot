@@ -28,15 +28,24 @@ pub async fn auth_middleware(
     mut request: Request,
     next: Next,
 ) -> Result<Response> {
+    tracing::debug!("🔐 Auth middleware: Processing request to {}", request.uri());
+    
     // Extract the Authorization header
     let auth_header = request
         .headers()
         .get(AUTHORIZATION)
-        .and_then(|header| header.to_str().ok())
-        .ok_or(Error::Unauthorized)?;
+        .and_then(|header| header.to_str().ok());
+    
+    tracing::debug!("🔐 Auth header present: {}", auth_header.is_some());
+    
+    let auth_header = auth_header.ok_or_else(|| {
+        tracing::warn!("❌ No Authorization header found");
+        Error::Unauthorized
+    })?;
 
     // Check if it's a Bearer token
     if !auth_header.starts_with("Bearer ") {
+        tracing::warn!("❌ Authorization header doesn't start with 'Bearer '");
         return Err(Error::Unauthorized);
     }
 
@@ -45,11 +54,16 @@ pub async fn auth_middleware(
 
     // Validate token is not empty
     if token.is_empty() {
+        tracing::warn!("❌ Empty token after 'Bearer ' prefix");
         return Err(Error::Unauthorized);
     }
 
+    tracing::debug!("🔐 Token extracted, length: {}, preview: {}...", token.len(), &token[..20.min(token.len())]);
+
     // Validate the JWT token
     let user_context = validate_jwt_token(token, &config.auth.jwt_secret)?;
+
+    tracing::debug!("✅ Token validated successfully for user: {}", user_context.email);
 
     // Add user context to request extensions for downstream handlers
     request.extensions_mut().insert(user_context);
@@ -86,17 +100,28 @@ pub async fn optional_auth_middleware(
 
 /// Validate JWT token and extract user claims
 fn validate_jwt_token(token: &str, secret: &str) -> Result<UserContext> {
+    tracing::debug!("🔍 Validating JWT token with secret length: {}", secret.len());
+    
     let decoding_key = DecodingKey::from_secret(secret.as_bytes());
     let validation = Validation::default();
 
     let token_data = decode::<Claims>(token, &decoding_key, &validation)
-        .map_err(|_| Error::Unauthorized)?;
+        .map_err(|e| {
+            tracing::error!("❌ JWT decode failed: {:?}", e);
+            Error::Unauthorized
+        })?;
 
     let claims = token_data.claims;
+    tracing::debug!("🔍 JWT claims extracted: sub={}, email={}", claims.sub, claims.email);
 
     // Parse user ID from claims
     let user_id = Uuid::parse_str(&claims.sub)
-        .map_err(|_| Error::Unauthorized)?;
+        .map_err(|e| {
+            tracing::error!("❌ Failed to parse user ID from claims.sub '{}': {:?}", claims.sub, e);
+            Error::Unauthorized
+        })?;
+
+    tracing::debug!("✅ User context created: id={}, email={}", user_id, claims.email);
 
     Ok(UserContext {
         user_id,

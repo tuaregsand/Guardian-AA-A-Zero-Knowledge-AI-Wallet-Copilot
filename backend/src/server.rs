@@ -92,8 +92,19 @@ fn create_app(state: Arc<AppState>, config: &Config) -> Result<Router> {
                 .parse::<axum::http::HeaderValue>()
                 .map_err(|e| crate::error::Error::Config(format!("Invalid CORS origin: {}", e)))?,
         )
-        .allow_methods(Any)
-        .allow_headers(Any)
+        .allow_methods([
+            axum::http::Method::GET,
+            axum::http::Method::POST,
+            axum::http::Method::PUT,
+            axum::http::Method::DELETE,
+            axum::http::Method::OPTIONS,
+        ])
+        .allow_headers([
+            axum::http::header::AUTHORIZATION,
+            axum::http::header::CONTENT_TYPE,
+            axum::http::header::ACCEPT,
+            axum::http::header::ORIGIN,
+        ])
         .allow_credentials(true);
     
     // Create the main router

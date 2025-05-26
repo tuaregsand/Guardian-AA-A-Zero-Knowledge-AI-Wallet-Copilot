@@ -67,9 +67,9 @@ fn wallet_routes() -> Router<Arc<AppState>> {
     Router::new()
         .route("/", post(handlers::wallet::create_wallet))
         .route("/", get(handlers::wallet::get_wallets))
-        .route("/:wallet_id", get(handlers::wallet::get_wallet))
-        .route("/:wallet_id", delete(handlers::wallet::deactivate_wallet))
-        .route("/:wallet_id/balance", get(handlers::wallet::get_wallet_balance))
+        .route("/{wallet_id}", get(handlers::wallet::get_wallet))
+        .route("/{wallet_id}", delete(handlers::wallet::deactivate_wallet))
+        .route("/{wallet_id}/balance", get(handlers::wallet::get_wallet_balance))
 }
 
 /// Protected transaction routes
@@ -88,8 +88,8 @@ fn transaction_routes() -> Router<Arc<AppState>> {
         .route("/", post(handlers::transaction::create_transaction))
         .route("/", get(handlers::transaction::get_transactions))
         .route("/estimate-fee", post(handlers::transaction::estimate_fee))
-        .route("/:transaction_id", get(handlers::transaction::get_transaction))
-        .route("/:transaction_id/submit", post(handlers::transaction::submit_transaction))
+        .route("/{transaction_id}", get(handlers::transaction::get_transaction))
+        .route("/{transaction_id}/submit", post(handlers::transaction::submit_transaction))
 }
 
 /// Protected AI agent routes
@@ -106,10 +106,10 @@ fn protected_agent_routes(state: Arc<AppState>) -> Router<Arc<AppState>> {
 fn agent_routes() -> Router<Arc<AppState>> {
     Router::new()
         .route("/", get(handlers::agent::get_agents))
-        .route("/:agent_id", get(handlers::agent::get_agent))
+        .route("/{agent_id}", get(handlers::agent::get_agent))
         .route("/predictions", post(handlers::agent::create_prediction))
         .route("/predictions", get(handlers::agent::get_predictions))
-        .route("/predictions/:prediction_id", get(handlers::agent::get_prediction))
+        .route("/predictions/{prediction_id}", get(handlers::agent::get_prediction))
         .route("/analyze", post(handlers::agent::generate_market_analysis))
         .route("/cleanup", post(handlers::agent::cleanup_expired_predictions))
 }
@@ -129,8 +129,8 @@ fn zkml_routes() -> Router<Arc<AppState>> {
     Router::new()
         .route("/generate", post(handlers::zkml::generate_proof))
         .route("/verify", post(handlers::zkml::verify_proof))
-        .route("/status/:id", get(handlers::zkml::get_proof_status))
-        .route("/circuit/:name", get(handlers::zkml::get_circuit_info))
+        .route("/status/{id}", get(handlers::zkml::get_proof_status))
+        .route("/circuit/{name}", get(handlers::zkml::get_circuit_info))
         .route("/system/status", get(handlers::zkml::get_system_status))
         .route("/health", get(handlers::zkml::health_check))
 }
